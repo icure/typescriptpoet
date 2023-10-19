@@ -17,6 +17,8 @@
 package io.outfoxx.typescriptpoet
 
 import java.io.Closeable
+import java.nio.file.Path
+import java.nio.file.Paths
 import java.util.EnumSet
 import java.util.Stack
 
@@ -24,10 +26,12 @@ import java.util.Stack
  * Converts a [FileSpec] to a string suitable to both human- and tsc-consumption. This honors
  * imports, indentation, and deferred variable names.
  */
-internal class CodeWriter constructor(
-  out: Appendable,
-  private val indent: String = "  ",
-  val renamedSymbols: Map<SymbolSpec, String> = emptyMap()
+internal class CodeWriter(
+    out: Appendable,
+    private val indent: String = "  ",
+    val renamedSymbols: Map<SymbolSpec, String> = emptyMap(),
+    private val absPath: Path = Paths.get("/"),
+    private val directory: Path = Paths.get("/"),
 ) : Closeable {
 
   private val out = LineWrapper(out, indent, 100)
@@ -148,15 +152,48 @@ internal class CodeWriter constructor(
   }
 
   fun emitSymbol(symbolSpec: SymbolSpec) {
-    if (symbolSpec.isTopLevelSymbol) {
-      referencedSymbols.add(symbolSpec)
-      emit(renamedSymbols[symbolSpec] ?: symbolSpec.value)
+    val mustImport = if (symbolSpec is SymbolSpec.Imported) {
+      // Check if import is from other file
+      when {
+        symbolSpec.source.startsWith("./") -> {
+          val absImportPath = absPath.resolve(symbolSpec.source).toAbsolutePath().normalize()
+          absImportPath != absPath
+        }
+
+        symbolSpec.source.startsWith("!") -> {
+          val absImportPath = directory.resolve(symbolSpec.source.removePrefix("!")).toAbsolutePath().normalize()
+          absImportPath != absPath
+        }
+
+        else -> true
+      }
+    } else false
+
+    val resolvedSymbol = if (mustImport) {
+      symbolSpec
     } else {
-      val topLevel = symbolSpec.topLevel()
+      // Symbol is not imported, emit symbol with relative path
+      val fullPath = symbolSpec.value.split(".")
+      val relativePath = fullPath.dropCommon(currentScope())
+      val relativeName =
+          if (relativePath.isNotEmpty()) {
+            relativePath.joinToString(".")
+          } else {
+            fullPath.last()
+          }
+
+      SymbolSpec.implicit(relativeName)
+    }
+
+    if (resolvedSymbol.isTopLevelSymbol) {
+      referencedSymbols.add(resolvedSymbol)
+      emit(renamedSymbols[resolvedSymbol] ?: resolvedSymbol.value)
+    } else {
+      val topLevel = resolvedSymbol.topLevel()
       referencedSymbols.add(topLevel)
       emit(renamedSymbols[topLevel] ?: topLevel.value)
       emit(".")
-      emit(symbolSpec.value.split(".").drop(1).joinToString("."))
+      emit(resolvedSymbol.value.split(".").drop(1).joinToString("."))
     }
   }
 

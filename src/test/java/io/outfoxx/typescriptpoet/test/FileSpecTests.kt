@@ -570,7 +570,7 @@ class FileSpecTests {
 
   @Test
   fun `Generates relative references for generated nested modules`() {
-    val nestedTypeName = TypeName.namedImport("Test", "!client/types/test").nested("Nested")
+    val nestedTypeName = TypeName.namedImport("Test", "!client/api/test").nested("Nested")
 
     val testFile =
       FileSpec.builder("client/api/test")
@@ -610,6 +610,59 @@ class FileSpecTests {
             }
           
             class SubNested extends Nested {
+            }
+          
+          }
+          
+        """.trimIndent()
+      )
+    )
+  }
+
+  @Test
+  fun `Generates references for imported nested modules`() {
+    val nestedTypeName = TypeName.namedImport("Test", "!client/types/test").nested("Nested")
+
+    val testFile =
+      FileSpec.builder("client/api/test")
+        .addClass(
+          ClassSpec.builder("Test")
+            .build()
+        )
+        .addModule(
+          ModuleSpec.builder("Test")
+            .addClass(
+              ClassSpec.builder("Nested")
+                .build()
+            )
+            .addClass(
+              ClassSpec.builder("SubNested")
+                .superClass(nestedTypeName)
+                .build()
+            )
+            .build()
+        )
+        .build()
+
+    val out = StringBuilder()
+    testFile.writeTo(out)
+
+    assertThat(
+      out.toString(),
+      equalTo(
+        """
+          import {Test as Test_} from '../types/test';
+          
+          
+          class Test {
+          }
+          
+          namespace Test {
+          
+            class Nested {
+            }
+          
+            class SubNested extends Test_.Nested {
             }
           
           }

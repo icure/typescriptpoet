@@ -51,20 +51,7 @@ sealed class TypeName {
     fun parameterized(vararg typeArgs: TypeName) = parameterizedType(this, *typeArgs)
 
     override fun emit(codeWriter: CodeWriter) {
-      val fullPath = base.value.split(".")
-      val relativePath = fullPath.dropCommon(codeWriter.currentScope())
-      val relativeName =
-        if (relativePath.isNotEmpty()) {
-          relativePath.joinToString(".")
-        } else {
-          fullPath.last()
-        }
-
-      if (relativeName == base.value) {
-        codeWriter.emitSymbol(base)
-      } else {
-        codeWriter.emitSymbol(SymbolSpec.implicit(relativeName))
-      }
+      codeWriter.emitSymbol(base)
     }
 
     override fun toString() = buildCodeString { emit(this) }

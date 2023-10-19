@@ -20,20 +20,20 @@ package io.outfoxx.typescriptpoet
 class ModuleSpec
 private constructor(
   builder: Builder
-) : Taggable(builder.tags.toImmutableMap()) {
+) : TypeSpec<ModuleSpec, ModuleSpec.Builder>(builder) {
 
   enum class Kind(val keyword: String) {
     MODULE("module"),
     NAMESPACE("namespace")
   }
 
-  val name = builder.name
+  override val name = builder.name
   val tsDoc = builder.tsDoc.build()
   val modifiers = builder.modifiers.toImmutableList()
   val members = builder.members.toImmutableList()
   val kind = builder.kind
 
-  internal fun emit(codeWriter: CodeWriter) {
+  override fun emit(codeWriter: CodeWriter) {
     codeWriter.pushScope(name)
     try {
 
@@ -99,9 +99,9 @@ private constructor(
 
   open class Builder
   internal constructor(
-    internal val name: String,
+    name: String,
     internal val kind: Kind = Kind.NAMESPACE
-  ) : Taggable.Builder<Builder>() {
+  ) : TypeSpec.Builder<ModuleSpec, Builder>(name) {
 
     internal val tsDoc = CodeBlock.builder()
     internal val modifiers = mutableSetOf<Modifier>()
@@ -161,6 +161,7 @@ private constructor(
         is InterfaceSpec -> addInterface(typeSpec)
         is ClassSpec -> addClass(typeSpec)
         is TypeAliasSpec -> addTypeAlias(typeSpec)
+        is ModuleSpec -> addModule(typeSpec)
       }
     }
 
@@ -198,7 +199,7 @@ private constructor(
       return !isEmpty()
     }
 
-    fun build() = ModuleSpec(this)
+    override fun build() = ModuleSpec(this)
   }
 
   companion object {
