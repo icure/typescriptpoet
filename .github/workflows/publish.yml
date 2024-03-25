@@ -33,6 +33,6 @@ jobs:
       with:
         job-id: jdk8-build-test
         arguments: >-
-          publishMavenPublicationToMavenLocal --max-workers 1 closeAndReleaseSonatypeStagingRepository
+          publishAllPublicationsToSonatypeRepository --max-workers 1 closeAndReleaseSonatypeStagingRepository
         properties: |
           releaseVersion=${{ steps.tagName.outputs.tag }}
