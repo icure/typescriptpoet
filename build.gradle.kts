@@ -203,7 +203,7 @@ tasks.withType<Sign>().configureEach {
 //
 
 githubRelease {
-  owner("outfoxx")
+  owner("Legion2")
   repo(name)
   tagName("v$releaseVersion")
   targetCommitish("main")
