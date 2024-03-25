@@ -9,8 +9,7 @@ plugins {
   kotlin("jvm") version "1.9.22"
   id("org.jetbrains.dokka") version "1.9.20"
 
-  id("net.minecrell.licenser") version "0.4.1"
-  id("org.jmailen.kotlinter") version "3.3.0"
+  id("org.jmailen.kotlinter") version "4.3.0"
   id("com.github.breadmoirai.github-release") version "2.2.12"
 }
 
@@ -19,7 +18,7 @@ val releaseVersion: String by project
 val isSnapshot = releaseVersion.endsWith("SNAPSHOT")
 
 
-group = "io.outfoxx"
+group = "de.voize"
 version = releaseVersion
 description = "A Kotlin/Java API for generating .ts source files."
 
@@ -36,7 +35,6 @@ val hamcrestVersion = "1.3"
 
 repositories {
   mavenCentral()
-  jcenter()
 }
 
 dependencies {
@@ -95,7 +93,7 @@ tasks {
 //
 
 jacoco {
-  toolVersion = "0.8.5"
+  toolVersion = "0.8.11"
 }
 
 tasks {
@@ -126,21 +124,6 @@ tasks {
   }
 }
 
-
-//
-// CHECKS
-//
-
-kotlinter {
-  indentSize = 2
-}
-
-license {
-  header = file("HEADER.txt")
-  include("**/*.kt")
-}
-
-
 //
 // PUBLISHING
 //
@@ -153,54 +136,42 @@ publishing {
       from(components["java"])
 
       pom {
-
         name.set("TypeScript Poet")
         description.set("TypeScriptPoet is a Kotlin and Java API for generating .ts source files.")
-        url.set("https://github.com/outfoxx/typescriptpoet")
+        url.set("https://github.com/voize-gmbh/typescriptpoet")
 
-        organization {
-          name.set("Outfox, Inc.")
-          url.set("https://outfoxx.io")
-        }
-
-        issueManagement {
-          system.set("GitHub")
-          url.set("https://github.com/outfoxx/typescriptpoet/issues")
+        scm {
+            url.set("https://github.com/voize-gmbh/reakt-native-toolkit")
         }
 
         licenses {
           license {
-            name.set("Apache License 2.0")
-            url.set("https://raw.githubusercontent.com/outfoxx/typescriptpoet/master/LICENSE.txt")
-            distribution.set("repo")
+            name.set("Apache-2.0")
+            url.set("https://opensource.org/licenses/Apache-2.0")
           }
         }
-
-        scm {
-          url.set("https://github.com/outfoxx/typescriptpoet")
-          connection.set("scm:https://github.com/outfoxx/typescriptpoet.git")
-          developerConnection.set("scm:git@github.com:outfoxx/typescriptpoet.git")
-        }
-
         developers {
           developer {
-            id.set("kdubb")
-            name.set("Kevin Wooten")
-            email.set("kevin@outfoxx.io")
+            id.set("LeonKiefer")
+            name.set("Leon Kiefer")
+            email.set("leon@voize.de")
+          }
+          developer {
+            id.set("ErikZiegler")
+            name.set("Erik Ziegler")
+            email.set("erik@voize.de")
           }
         }
-
       }
     }
-
   }
 
   repositories {
 
     maven {
       name = "MavenCentral"
-      val snapshotUrl = "https://oss.sonatype.org/content/repositories/snapshots/"
-      val releaseUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+      val snapshotUrl = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
+      val releaseUrl = "https://s01.oss.sonatype.org/service/local/"
       url = uri(if (isSnapshot) snapshotUrl else releaseUrl)
 
       credentials {
@@ -215,10 +186,9 @@ publishing {
 
 signing {
   if (!hasProperty("signing.keyId")) {
-    val signingKeyId: String? by project
     val signingKey: String? by project
     val signingPassword: String? by project
-    useInMemoryPgpKeys(signingKeyId, signingKey, signingPassword)
+    useInMemoryPgpKeys(signingKey, signingPassword)
   }
   sign(publishing.publications["library"])
 }

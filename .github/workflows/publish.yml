@@ -11,11 +11,12 @@ jobs:
 
     steps:
 
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
 
-    - uses: actions/setup-java@v1
+    - uses: actions/setup-java@v4
       with:
-        java-version: '11'
+        java-version: '17'
+        distribution: 'corretto'
 
     - uses: olegtarasov/get-tag@v2.1
       id: tagName
@@ -25,9 +26,8 @@ jobs:
     - name: Publish Maven
       uses: burrunan/gradle-cache-action@v1
       env:
-        ORG_GRADLE_PROJECT_signingKeyId: ${{ secrets.OSSRH_GPG_SECRET_KEY_ID }}
-        ORG_GRADLE_PROJECT_signingKey: ${{ secrets.OSSRH_GPG_SECRET_KEY }}
-        ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}
+        ORG_GRADLE_PROJECT_signingKey: ${{ secrets.SIGNING_SIGNING_KEY }}
+        ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.SIGNING_PASSWORD }}
       with:
         job-id: jdk8-build-test
         arguments: >-
@@ -36,8 +36,8 @@ jobs:
           -x test
         properties: |
           releaseVersion=${{ steps.tagName.outputs.tag }}
-          ossrhUsername=${{ secrets.OSSRH_USER }}
-          ossrhPassword=${{ secrets.OSSRH_PASS }}
+          ossrhUsername=${{ secrets.OSSRH_USERNAME }}
+          ossrhPassword=${{ secrets.OSSRH_PASSWORD }}
           github.token=${{ secrets.GITHUB_TOKEN }}
 
     - name: Build Docs
@@ -47,7 +47,7 @@ jobs:
         arguments: dokkaHtml
 
     - name: Publish Documentation
-      uses: JamesIves/github-pages-deploy-action@4.0.0
+      uses: JamesIves/github-pages-deploy-action@4.5.0
       with:
         branch: gh-pages
         clean: false
