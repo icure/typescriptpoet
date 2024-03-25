@@ -42,7 +42,7 @@ nexusPublishing {
     }
 }
 
-subprojects {
+allprojects {
     apply(plugin = "org.jetbrains.dokka")
     apply(plugin = "maven-publish")
     apply(plugin = "signing")

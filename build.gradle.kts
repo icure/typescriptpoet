@@ -1,10 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-  `java-library`
   jacoco
-  `maven-publish`
-  signing
 
   kotlin("jvm") version "1.9.22"
   id("org.jetbrains.dokka") version "1.9.20"
