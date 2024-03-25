@@ -38,4 +38,3 @@ jobs:
           releaseVersion=${{ steps.tagName.outputs.tag }}
           ossrhUsername=${{ secrets.OSSRH_USERNAME }}
           ossrhPassword=${{ secrets.OSSRH_PASSWORD }}
-          github.token=${{ secrets.GITHUB_TOKEN }}

@@ -10,7 +10,6 @@ plugins {
   id("org.jetbrains.dokka") version "1.9.20"
 
   id("org.jmailen.kotlinter") version "4.3.0"
-  id("com.github.breadmoirai.github-release") version "2.2.12"
 }
 
 
@@ -202,20 +201,6 @@ tasks.withType<Sign>().configureEach {
 // RELEASING
 //
 
-githubRelease {
-  owner("Legion2")
-  repo(name)
-  tagName("v$releaseVersion")
-  targetCommitish("main")
-  releaseName("🎉 $releaseVersion Release")
-  draft(true)
-  prerelease(!releaseVersion.matches("""^\d+\.\d+\.\d+$""".toRegex()))
-  releaseAssets(
-    files("$buildDir/libs/${name}-${releaseVersion}*.jar")
-  )
-  overwrite(true)
-  token(project.findProperty("github.token") as String? ?: System.getenv("GITHUB_TOKEN"))
-}
 
 tasks {
 
@@ -228,7 +213,6 @@ tasks {
   register("publishRelease") {
     dependsOn(
       "publishMavenRelease",
-      "githubRelease"
     )
   }
 
