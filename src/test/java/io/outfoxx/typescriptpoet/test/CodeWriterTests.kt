@@ -49,8 +49,8 @@ class CodeWriterTests {
                   mmmmm, nnnnn, ooooo, ppppp, qqqqq);
             }
 
-        """.trimIndent()
-      )
+        """.trimIndent(),
+      ),
     )
   }
 
@@ -83,8 +83,8 @@ class CodeWriterTests {
               return new X();
             }
 
-        """.trimIndent()
-      )
+        """.trimIndent(),
+      ),
     )
   }
 
@@ -117,8 +117,8 @@ class CodeWriterTests {
                 return new foo.Bar();
               }
 
-          """.trimIndent()
-      )
+          """.trimIndent(),
+      ),
     )
   }
 
@@ -128,19 +128,27 @@ class CodeWriterTests {
     val symbol2 = SymbolSpec.implicit("foo").nested("bar2").nested("Test")
 
     val testFileSpec = FileSpec.builder("test")
-      .addModule(ModuleSpec.builder("foo")
-        .addModule(ModuleSpec.builder("bar2")
+      .addModule(
+        ModuleSpec.builder("foo")
+        .addModule(
+          ModuleSpec.builder("bar2")
           .addClass(ClassSpec.builder("Test").build())
-          .addFunction(FunctionSpec.builder("test1")
+          .addFunction(
+            FunctionSpec.builder("test1")
             .returns(TypeName.standard(symbol1))
             .addCode(CodeBlock.of("return new %Q();\n", symbol1))
-            .build())
-          .addFunction(FunctionSpec.builder("test2")
+            .build(),
+          )
+          .addFunction(
+            FunctionSpec.builder("test2")
             .returns(TypeName.standard(symbol2))
             .addCode(CodeBlock.of("return new %Q();\n", symbol2))
-            .build())
-          .build())
-        .build())
+            .build(),
+          )
+          .build(),
+        )
+        .build(),
+      )
       .build()
 
     val fileContent = StringWriter().use { writer ->
@@ -174,9 +182,8 @@ class CodeWriterTests {
               
               }
 
-          """.trimIndent()
-      )
+          """.trimIndent(),
+      ),
     )
   }
-
 }

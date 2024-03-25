@@ -27,10 +27,11 @@ object FileModules {
       val importerDir = importerPath.parent ?: importerPath
       val importPath = directory.resolve(import.drop(1)).toAbsolutePath().normalize()
       val importedPath = importerDir.relativize(importPath).normalize().toString()
-      if (importedPath.startsWith("."))
+      if (importedPath.startsWith(".")) {
         importedPath
-      else
+      } else {
         "./$importedPath"
+      }
     } else {
       import
     }

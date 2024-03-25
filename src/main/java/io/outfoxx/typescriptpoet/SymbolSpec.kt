@@ -22,7 +22,7 @@ package io.outfoxx.typescriptpoet
  * @param value Value of the symbol
  */
 sealed class SymbolSpec(
-  open val value: String
+  open val value: String,
 ) {
 
   abstract fun nested(name: String): SymbolSpec
@@ -97,11 +97,15 @@ sealed class SymbolSpec(
         return when (type) {
           "*" -> importsAll(symbolName, modulePath)
           "@" -> importsName(symbolName, modulePath)
-          "+" -> if (targetName == null) sideEffect(symbolName, modulePath) else augmented(
+          "+" -> if (targetName == null) {
+            sideEffect(symbolName, modulePath)
+          } else {
+            augmented(
             symbolName,
             modulePath,
-            targetName
+            targetName,
           )
+          }
           else -> throw IllegalArgumentException("Invalid type character")
         }
       }
@@ -182,7 +186,7 @@ sealed class SymbolSpec(
    */
   data class Implicit
   internal constructor(
-    override val value: String
+    override val value: String,
   ) : SymbolSpec(value) {
 
     override fun nested(name: String) = Implicit("$value.$name")
@@ -195,7 +199,7 @@ sealed class SymbolSpec(
    */
   abstract class Imported(
     override val value: String,
-    open val source: String
+    open val source: String,
   ) : SymbolSpec(value)
 
   /**
@@ -207,7 +211,7 @@ sealed class SymbolSpec(
   data class ImportsName
   internal constructor(
     override val value: String,
-    override val source: String
+    override val source: String,
   ) : Imported(value, source) {
 
     override fun nested(name: String) = ImportsName("$value.$name", source)
@@ -224,7 +228,7 @@ sealed class SymbolSpec(
   data class ImportsAll
   internal constructor(
     override val value: String,
-    override val source: String
+    override val source: String,
   ) : Imported(value, source) {
 
     override fun nested(name: String) = ImportsAll("$value.$name", source)
@@ -242,7 +246,7 @@ sealed class SymbolSpec(
   internal constructor(
     override val value: String,
     override val source: String,
-    val augmented: String
+    val augmented: String,
   ) : Imported(value, source) {
 
     override fun nested(name: String) = Augmented("$value.$name", source, augmented)
@@ -259,7 +263,7 @@ sealed class SymbolSpec(
   data class SideEffect
   internal constructor(
     override val value: String,
-    override val source: String
+    override val source: String,
   ) : Imported(value, source) {
 
     override fun nested(name: String) = SideEffect("$value.$name", source)

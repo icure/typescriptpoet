@@ -61,8 +61,8 @@ class EnumSpecTests {
             enum Test {
             }
 
-        """.trimIndent()
-      )
+        """.trimIndent(),
+      ),
     )
   }
 
@@ -83,8 +83,8 @@ class EnumSpecTests {
             export enum Test {
             }
 
-        """.trimIndent()
-      )
+        """.trimIndent(),
+      ),
     )
   }
 
@@ -110,8 +110,8 @@ class EnumSpecTests {
               C = 30
             }
 
-        """.trimIndent()
-      )
+        """.trimIndent(),
+      ),
     )
   }
 

@@ -37,7 +37,6 @@ class FileSpecTests {
   @Test
   @DisplayName("Imports are not generated when type & class are exported together into relative directory")
   fun testImportDetect() {
-
     val ifaceBuilder =
       InterfaceSpec.builder("Test")
         .addModifiers(Modifier.EXPORT)
@@ -68,15 +67,14 @@ class FileSpecTests {
           export class Test implements Test {
           }
         
-        """.trimIndent()
-      )
+        """.trimIndent(),
+      ),
     )
   }
 
   @Test
   @DisplayName("Imports are not generated when type & class are exported together into absolute directory")
   fun testImportDetectAbsolute() {
-
     val ifaceBuilder =
       InterfaceSpec.builder("Test")
         .addModifiers(Modifier.EXPORT)
@@ -107,8 +105,8 @@ class FileSpecTests {
           export class Test implements Test {
           }
         
-        """.trimIndent()
-      )
+        """.trimIndent(),
+      ),
     )
   }
 
@@ -132,7 +130,7 @@ class FileSpecTests {
           """
             A file header comment that
             spans multiple lines.
-          """.trimIndent()
+          """.trimIndent(),
         )
         .build()
 
@@ -143,8 +141,8 @@ class FileSpecTests {
           // A file header comment that
           // spans multiple lines.
 
-        """.trimIndent()
-      )
+        """.trimIndent(),
+      ),
     )
   }
 
@@ -157,7 +155,7 @@ class FileSpecTests {
       FileSpec.builder("test")
         .addTypeAlias(
           TypeAliasSpec.builder("Test", typeName)
-            .build()
+            .build(),
         )
         .build()
 
@@ -173,8 +171,8 @@ class FileSpecTests {
           
           type Test = Observable;
           
-        """.trimIndent()
-      )
+        """.trimIndent(),
+      ),
     )
   }
 
@@ -186,7 +184,7 @@ class FileSpecTests {
       FileSpec.builder("api/test")
         .addTypeAlias(
           TypeAliasSpec.builder("Test", typeName)
-            .build()
+            .build(),
         )
         .build()
 
@@ -202,22 +200,22 @@ class FileSpecTests {
           
           type Test = Observable;
           
-        """.trimIndent()
-      )
+        """.trimIndent(),
+      ),
     )
   }
 
   @Test
   fun `Generates star imports`() {
     val typeName = TypeName.standard(
-      SymbolSpec.importsAll("stuff", "stuff/types")
+      SymbolSpec.importsAll("stuff", "stuff/types"),
     )
 
     val testFile =
       FileSpec.builder("test")
         .addTypeAlias(
           TypeAliasSpec.builder("Test", typeName)
-            .build()
+            .build(),
         )
         .build()
 
@@ -233,22 +231,22 @@ class FileSpecTests {
           
           type Test = stuff;
           
-        """.trimIndent()
-      )
+        """.trimIndent(),
+      ),
     )
   }
 
   @Test
   fun `Generates star imports for generated modules`() {
     val typeName = TypeName.standard(
-      SymbolSpec.importsAll("stuff", "!stuff/types")
+      SymbolSpec.importsAll("stuff", "!stuff/types"),
     )
 
     val testFile =
       FileSpec.builder("api/test")
         .addTypeAlias(
           TypeAliasSpec.builder("Test", typeName)
-            .build()
+            .build(),
         )
         .build()
 
@@ -264,8 +262,8 @@ class FileSpecTests {
           
           type Test = stuff;
           
-        """.trimIndent()
-      )
+        """.trimIndent(),
+      ),
     )
   }
 
@@ -274,18 +272,18 @@ class FileSpecTests {
   fun testAugmentImports() {
     val typeName1 = TypeName.namedImport("Observable", "rxjs/observable")
     val typeName2 = TypeName.standard(
-      SymbolSpec.augmented("flatMap", "rxjs/operators/flatMap", "Observable")
+      SymbolSpec.augmented("flatMap", "rxjs/operators/flatMap", "Observable"),
     )
 
     val testFile =
       FileSpec.builder("test")
         .addTypeAlias(
           TypeAliasSpec.builder("Test1", typeName1)
-            .build()
+            .build(),
         )
         .addTypeAlias(
           TypeAliasSpec.builder("Test2", typeName2)
-            .build()
+            .build(),
         )
         .build()
 
@@ -304,8 +302,8 @@ class FileSpecTests {
           
           type Test2 = flatMap;
           
-        """.trimIndent()
-      )
+        """.trimIndent(),
+      ),
     )
   }
 
@@ -313,14 +311,14 @@ class FileSpecTests {
   @DisplayName("Generates side effect imports")
   fun testSideEffectImports() {
     val typeName = TypeName.standard(
-      SymbolSpec.sideEffect("describe", "mocha")
+      SymbolSpec.sideEffect("describe", "mocha"),
     )
 
     val testFile =
       FileSpec.builder("test")
         .addTypeAlias(
           TypeAliasSpec.builder("Test", typeName)
-            .build()
+            .build(),
         )
         .build()
 
@@ -336,8 +334,8 @@ class FileSpecTests {
           
           type Test = describe;
           
-        """.trimIndent()
-      )
+        """.trimIndent(),
+      ),
     )
   }
 
@@ -351,15 +349,15 @@ class FileSpecTests {
       FileSpec.builder("test")
         .addTypeAlias(
           TypeAliasSpec.builder("LocalTest1", typeName1)
-            .build()
+            .build(),
         )
         .addTypeAlias(
           TypeAliasSpec.builder("LocalTest2", typeName2)
-            .build()
+            .build(),
         )
         .addTypeAlias(
           TypeAliasSpec.builder("Another", typeName3)
-            .build()
+            .build(),
         )
         .build()
 
@@ -380,8 +378,8 @@ class FileSpecTests {
           
           type Another = Another_;
           
-        """.trimIndent()
-      )
+        """.trimIndent(),
+      ),
     )
   }
 
@@ -395,15 +393,15 @@ class FileSpecTests {
       FileSpec.builder("api/client/test")
         .addTypeAlias(
           TypeAliasSpec.builder("LocalTest1", typeName1)
-            .build()
+            .build(),
         )
         .addTypeAlias(
           TypeAliasSpec.builder("LocalTest2", typeName2)
-            .build()
+            .build(),
         )
         .addTypeAlias(
           TypeAliasSpec.builder("Another", typeName3)
-            .build()
+            .build(),
         )
         .build()
 
@@ -424,8 +422,8 @@ class FileSpecTests {
           
           type Another = Another_;
           
-        """.trimIndent()
-      )
+        """.trimIndent(),
+      ),
     )
   }
 
@@ -439,15 +437,15 @@ class FileSpecTests {
       FileSpec.builder("test")
         .addTypeAlias(
           TypeAliasSpec.builder("LocalTest1", typeName1)
-            .build()
+            .build(),
         )
         .addTypeAlias(
           TypeAliasSpec.builder("LocalTest2", typeName2)
-            .build()
+            .build(),
         )
         .addTypeAlias(
           TypeAliasSpec.builder("Another", typeName3)
-            .build()
+            .build(),
         )
         .build()
 
@@ -468,8 +466,8 @@ class FileSpecTests {
           
           type Another = Another_.Kind;
           
-        """.trimIndent()
-      )
+        """.trimIndent(),
+      ),
     )
   }
 
@@ -483,15 +481,15 @@ class FileSpecTests {
       FileSpec.builder("client/api/test")
         .addTypeAlias(
           TypeAliasSpec.builder("LocalTest1", typeName1)
-            .build()
+            .build(),
         )
         .addTypeAlias(
           TypeAliasSpec.builder("LocalTest2", typeName2)
-            .build()
+            .build(),
         )
         .addTypeAlias(
           TypeAliasSpec.builder("Another", typeName3)
-            .build()
+            .build(),
         )
         .build()
 
@@ -512,8 +510,8 @@ class FileSpecTests {
           
           type Another = Another_.Kind;
           
-        """.trimIndent()
-      )
+        """.trimIndent(),
+      ),
     )
   }
 
@@ -525,20 +523,20 @@ class FileSpecTests {
       FileSpec.builder("test")
         .addClass(
           ClassSpec.builder("Test")
-            .build()
+            .build(),
         )
         .addModule(
           ModuleSpec.builder("Test")
             .addClass(
               ClassSpec.builder("Nested")
-                .build()
+                .build(),
             )
             .addClass(
               ClassSpec.builder("SubNested")
                 .superClass(nestedTypeName)
-                .build()
+                .build(),
             )
-            .build()
+            .build(),
         )
         .build()
 
@@ -563,8 +561,8 @@ class FileSpecTests {
           
           }
           
-        """.trimIndent()
-      )
+        """.trimIndent(),
+      ),
     )
   }
 
@@ -576,20 +574,20 @@ class FileSpecTests {
       FileSpec.builder("client/api/test")
         .addClass(
           ClassSpec.builder("Test")
-            .build()
+            .build(),
         )
         .addModule(
           ModuleSpec.builder("Test")
             .addClass(
               ClassSpec.builder("Nested")
-                .build()
+                .build(),
             )
             .addClass(
               ClassSpec.builder("SubNested")
                 .superClass(nestedTypeName)
-                .build()
+                .build(),
             )
-            .build()
+            .build(),
         )
         .build()
 
@@ -614,8 +612,8 @@ class FileSpecTests {
           
           }
           
-        """.trimIndent()
-      )
+        """.trimIndent(),
+      ),
     )
   }
 
@@ -627,20 +625,20 @@ class FileSpecTests {
       FileSpec.builder("client/api/test")
         .addClass(
           ClassSpec.builder("Test")
-            .build()
+            .build(),
         )
         .addModule(
           ModuleSpec.builder("Test")
             .addClass(
               ClassSpec.builder("Nested")
-                .build()
+                .build(),
             )
             .addClass(
               ClassSpec.builder("SubNested")
                 .superClass(nestedTypeName)
-                .build()
+                .build(),
             )
-            .build()
+            .build(),
         )
         .build()
 
@@ -667,8 +665,8 @@ class FileSpecTests {
           
           }
           
-        """.trimIndent()
-      )
+        """.trimIndent(),
+      ),
     )
   }
 }

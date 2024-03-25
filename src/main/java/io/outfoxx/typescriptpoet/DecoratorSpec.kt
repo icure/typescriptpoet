@@ -19,7 +19,7 @@ package io.outfoxx.typescriptpoet
 /** A generated function or class decorator declaration. */
 class DecoratorSpec
 internal constructor(
-  builder: Builder
+  builder: Builder,
 ) : Taggable(builder.tags.toImmutableMap()) {
 
   val name = builder.name
@@ -27,11 +27,9 @@ internal constructor(
   val factory = builder.factory
 
   internal fun emit(codeWriter: CodeWriter) {
-
     codeWriter.emitCode(CodeBlock.of("@%Q", name))
 
     if (parameters.isNotEmpty()) {
-
       codeWriter.emitCode("(")
 
       parameters.forEachIndexed { index, (first, second) ->
@@ -61,7 +59,7 @@ internal constructor(
 
   class Builder
   internal constructor(
-    val name: SymbolSpec
+    val name: SymbolSpec,
   ) : Taggable.Builder<Builder>() {
 
     internal val parameters = mutableListOf<Pair<String?, CodeBlock>>()

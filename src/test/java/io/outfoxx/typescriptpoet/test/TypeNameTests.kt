@@ -36,7 +36,6 @@ class TypeNameTests {
   @Test
   @DisplayName("Parsing nested type import only imports root symbol while referencing fully nested import")
   fun testParsingNestedImport() {
-
     val typeName = TypeName.namedImport("This", "!Api").nested("Is.Nested")
 
     val symbol = typeName.base as? SymbolSpec.ImportsName ?: fail("ImportsName symbol expected")
@@ -47,7 +46,6 @@ class TypeNameTests {
   @Test
   @DisplayName("Anonymous type names produce valid syntax")
   fun testAnonymousNameGen() {
-
     val typeName = TypeName.anonymousType("a" to STRING, "b" to NUMBER, "C" to BOOLEAN)
 
     assertThat(
@@ -55,8 +53,8 @@ class TypeNameTests {
       hasItems(
         Member("a", STRING, false),
         Member("b", NUMBER, false),
-        Member("C", BOOLEAN, false)
-      )
+        Member("C", BOOLEAN, false),
+      ),
     )
     assertThat(typeName.toString(), equalTo("{ a: string, b: number, C: boolean }"))
 
@@ -64,8 +62,8 @@ class TypeNameTests {
       arrayListOf(
         Member("a", NUMBER, true),
         Member("B", STRING, false),
-        Member("c", DATE, true)
-      )
+        Member("c", DATE, true),
+      ),
     )
 
     assertThat(
@@ -73,8 +71,8 @@ class TypeNameTests {
       hasItems(
         Member("a", NUMBER, true),
         Member("B", STRING, false),
-        Member("c", DATE, true)
-      )
+        Member("c", DATE, true),
+      ),
     )
     assertThat(typeName2.toString(), equalTo("{ a?: number, B: string, c?: Date }"))
   }

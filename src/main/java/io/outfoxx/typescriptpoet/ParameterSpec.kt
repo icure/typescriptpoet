@@ -19,7 +19,7 @@ package io.outfoxx.typescriptpoet
 import kotlin.math.min
 
 class ParameterSpec private constructor(
-  builder: Builder
+  builder: Builder,
 ) : Taggable(builder.tags.toImmutableMap()) {
 
   val name = builder.name
@@ -81,7 +81,7 @@ class ParameterSpec private constructor(
   class Builder internal constructor(
     internal val name: String,
     internal val type: TypeName,
-    internal var optional: Boolean
+    internal var optional: Boolean,
   ) : Taggable.Builder<Builder>() {
 
     internal val decorators = mutableListOf<DecoratorSpec>()
@@ -113,7 +113,7 @@ class ParameterSpec private constructor(
     }
 
     fun defaultValue(format: String, vararg args: Any?) = defaultValue(
-      CodeBlock.of(format, *args)
+      CodeBlock.of(format, *args),
     )
 
     fun defaultValue(codeBlock: CodeBlock) = apply {
@@ -142,7 +142,7 @@ internal fun List<ParameterSpec>.emit(
   emitBlock: (ParameterSpec, Boolean, Boolean) -> Unit =
     { param, isRest, optionalAllowed ->
       param.emit(codeWriter, optionalAllowed = optionalAllowed, isRest = isRest)
-    }
+    },
 ) = with(codeWriter) {
   val params = this@emit + if (rest != null) listOf(rest) else emptyList()
   if (enclosed) emit("(")

@@ -21,7 +21,7 @@ import io.outfoxx.typescriptpoet.CodeBlock.Companion.joinToCode
 /** A generated `interface` declaration. */
 class InterfaceSpec
 private constructor(
-  builder: Builder
+  builder: Builder,
 ) : TypeSpec<InterfaceSpec, InterfaceSpec.Builder>(builder) {
 
   override val name = builder.name
@@ -35,7 +35,6 @@ private constructor(
   val callable = builder.callable
 
   override fun emit(codeWriter: CodeWriter) {
-
     codeWriter.emitTSDoc(tsDoc)
     codeWriter.emitModifiers(modifiers, setOf())
     codeWriter.emit("interface")
@@ -107,7 +106,7 @@ private constructor(
   }
 
   class Builder(
-    name: String
+    name: String,
   ) : TypeSpec.Builder<InterfaceSpec, Builder>(name) {
 
     internal val tsDoc = CodeBlock.builder()

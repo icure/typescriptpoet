@@ -19,12 +19,12 @@ package io.outfoxx.typescriptpoet
 /** A generated `module` declaration. */
 class ModuleSpec
 private constructor(
-  builder: Builder
+  builder: Builder,
 ) : TypeSpec<ModuleSpec, ModuleSpec.Builder>(builder) {
 
   enum class Kind(val keyword: String) {
     MODULE("module"),
-    NAMESPACE("namespace")
+    NAMESPACE("namespace"),
   }
 
   override val name = builder.name
@@ -36,7 +36,6 @@ private constructor(
   override fun emit(codeWriter: CodeWriter) {
     codeWriter.pushScope(name)
     try {
-
       if (tsDoc.isNotEmpty()) {
         codeWriter.emitComment(tsDoc)
       }
@@ -100,7 +99,7 @@ private constructor(
   open class Builder
   internal constructor(
     name: String,
-    internal val kind: Kind = Kind.NAMESPACE
+    internal val kind: Kind = Kind.NAMESPACE,
   ) : TypeSpec.Builder<ModuleSpec, Builder>(name) {
 
     internal val tsDoc = CodeBlock.builder()
@@ -116,7 +115,7 @@ private constructor(
         Modifier.READONLY,
         Modifier.GET,
         Modifier.SET,
-        Modifier.STATIC
+        Modifier.STATIC,
       )
     }
 
@@ -130,8 +129,9 @@ private constructor(
 
     fun addModifier(modifier: Modifier) = apply {
       requireNoneOrOneOf(
-        modifiers + modifier, Modifier.EXPORT,
-        Modifier.DECLARE
+        modifiers + modifier,
+        Modifier.EXPORT,
+        Modifier.DECLARE,
       )
       modifiers += modifier
     }
@@ -174,9 +174,10 @@ private constructor(
 
     fun addProperty(propertySpec: PropertySpec) = apply {
       requireExactlyOneOf(
-        propertySpec.modifiers, Modifier.CONST,
+        propertySpec.modifiers,
+        Modifier.CONST,
         Modifier.LET,
-        Modifier.VAR
+        Modifier.VAR,
       )
       require(propertySpec.decorators.isEmpty()) { "decorators on file properties are not allowed" }
       checkMemberModifiers(propertySpec.modifiers)

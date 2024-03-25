@@ -21,7 +21,7 @@ import io.outfoxx.typescriptpoet.CodeBlock.Companion.joinToCode
 /** A generated `class` declaration. */
 class ClassSpec
 private constructor(
-  builder: Builder
+  builder: Builder,
 ) : TypeSpec<ClassSpec, ClassSpec.Builder>(builder) {
 
   override val name = builder.name
@@ -37,12 +37,12 @@ private constructor(
   val useConstructorPropertiesAutomatically = builder.useConstructorPropertiesAutomatically
 
   override fun emit(codeWriter: CodeWriter) {
-
     val constructorProperties: Map<String, PropertySpec> =
-      if (useConstructorPropertiesAutomatically)
+      if (useConstructorPropertiesAutomatically) {
         constructorProperties()
-      else
+      } else {
         emptyMap()
+      }
 
     codeWriter.emitTSDoc(tsDoc)
     codeWriter.emitDecorators(decorators, false)
@@ -71,7 +71,9 @@ private constructor(
       }
       codeWriter.emit("\n")
       propertySpec.emit(
-        codeWriter, setOf(Modifier.PUBLIC), asStatement = true,
+        codeWriter,
+        setOf(Modifier.PUBLIC),
+        asStatement = true,
         compactOptionalAllowed = !useConstructorPropertiesAutomatically,
       )
     }
@@ -97,13 +99,13 @@ private constructor(
 
       // Emit constructor parameters & property specs that can be replaced with parameters
       it.parameters.emit(
-        codeWriter, rest = it.restParameter,
-        constructorProperties = constructorProperties
+        codeWriter,
+        rest = it.restParameter,
+        constructorProperties = constructorProperties,
       ) { param, isRest, optionalAllowed ->
 
         var property = constructorProperties[param.name]
         if (property != null && !isRest) {
-
           // Ensure the parameter always has a modifier (that makes it a property in TS)
           if (
             property.modifiers.none { mod ->
@@ -111,7 +113,7 @@ private constructor(
                 Modifier.PUBLIC,
                 Modifier.PRIVATE,
                 Modifier.PROTECTED,
-                Modifier.READONLY
+                Modifier.READONLY,
               )
             }
           ) {
@@ -188,7 +190,7 @@ private constructor(
   }
 
   class Builder(
-    name: String
+    name: String,
   ) : TypeSpec.Builder<ClassSpec, Builder>(name) {
 
     internal val tsDoc = CodeBlock.builder()

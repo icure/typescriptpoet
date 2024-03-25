@@ -35,7 +35,7 @@ import java.nio.file.Paths
  */
 class FileSpec
 private constructor(
-  builder: Builder
+  builder: Builder,
 ) : Taggable(builder.tags.toImmutableMap()) {
 
   val modulePath = builder.modulePath
@@ -102,7 +102,6 @@ private constructor(
   fun writeTo(directory: File) = writeTo(directory.toPath())
 
   private fun emit(codeWriter: CodeWriter, directory: Path = Paths.get("/"), imports: Set<SymbolSpec.Imported> = emptySet()) {
-
     if (comment.isNotEmpty()) {
       codeWriter.emitComment(comment)
     }
@@ -138,7 +137,6 @@ private constructor(
   }
 
   private fun emitImports(codeWriter: CodeWriter, directory: Path, imports: Set<SymbolSpec.Imported>) {
-
     val augmentImports = imports
       .filterIsInstance<SymbolSpec.Augmented>()
       .groupBy { it.augmented }
@@ -223,7 +221,7 @@ private constructor(
   }
 
   class Builder internal constructor(
-    internal val modulePath: String
+    internal val modulePath: String,
   ) : Taggable.Builder<Builder>() {
 
     init {
@@ -246,7 +244,7 @@ private constructor(
         Modifier.STATIC,
         Modifier.CONST,
         Modifier.LET,
-        Modifier.VAR
+        Modifier.VAR,
       )
     }
 
@@ -292,9 +290,10 @@ private constructor(
 
     fun addProperty(propertySpec: PropertySpec) = apply {
       requireExactlyOneOf(
-        propertySpec.modifiers, Modifier.CONST,
+        propertySpec.modifiers,
+        Modifier.CONST,
         Modifier.LET,
-        Modifier.VAR
+        Modifier.VAR,
       )
       require(propertySpec.decorators.isEmpty()) { "decorators on file properties are not allowed" }
       checkMemberModifiers(propertySpec.modifiers)

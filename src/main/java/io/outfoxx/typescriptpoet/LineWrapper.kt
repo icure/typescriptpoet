@@ -23,7 +23,7 @@ package io.outfoxx.typescriptpoet
 internal class LineWrapper(
   private val out: Appendable,
   private val indent: String,
-  private val columnLimit: Int
+  private val columnLimit: Int,
 ) {
 
   private var closed = false
@@ -59,10 +59,11 @@ internal class LineWrapper(
 
     out.append(s)
     val lastNewline = s.lastIndexOf('\n')
-    column = if (lastNewline != -1)
+    column = if (lastNewline != -1) {
       s.length - lastNewline - 1
-    else
+    } else {
       column + s.length
+    }
   }
 
   /** Emit either a space or a newline character.  */

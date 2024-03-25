@@ -108,7 +108,7 @@ internal class CodeWriter(
    */
   fun emitModifiers(
     modifiers: Set<Modifier>,
-    implicitModifiers: Set<Modifier> = emptySet()
+    implicitModifiers: Set<Modifier> = emptySet(),
   ) {
     if (modifiers.isEmpty()) return
     for (modifier in EnumSet.copyOf(modifiers)) {
@@ -144,8 +144,8 @@ internal class CodeWriter(
               append(parts.joinToString(" "))
             }
           },
-          *typeVariable.bounds.map { it.type }.toTypedArray()
-        )
+          *typeVariable.bounds.map { it.type }.toTypedArray(),
+        ),
       )
     }
     emit(">")
@@ -167,7 +167,9 @@ internal class CodeWriter(
 
         else -> true
       }
-    } else false
+    } else {
+      false
+    }
 
     val resolvedSymbol = if (mustImport) {
       symbolSpec
@@ -200,7 +202,6 @@ internal class CodeWriter(
   fun emitCode(s: String) = emitCode(CodeBlock.of(s))
 
   fun emitCode(codeBlock: CodeBlock) = apply {
-
     var a = 0
     val partIterator = codeBlock.formatParts.listIterator()
     while (partIterator.hasNext()) {
@@ -264,20 +265,22 @@ internal class CodeWriter(
   private fun emitString(string: String?) {
     // Emit null as a literal null: no quotes.
     emit(
-      if (string != null)
+      if (string != null) {
         stringLiteralWithQuotes(string, (0 until (indentLevel + 1)).joinToString("") { indent })
-      else
+      } else {
         "null"
+      },
     )
   }
 
   private fun emitStringTemplate(string: String?) {
     // Emit null as a literal null: no quotes.
     emit(
-      if (string != null)
+      if (string != null) {
         stringTemplateLiteralWithBackticks(string, (0 until (indentLevel + 1)).joinToString("") { indent })
-      else
+      } else {
         "null"
+      },
     )
   }
 

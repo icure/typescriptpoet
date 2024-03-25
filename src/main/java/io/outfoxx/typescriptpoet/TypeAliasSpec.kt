@@ -19,7 +19,7 @@ package io.outfoxx.typescriptpoet
 /** A generated typealias declaration */
 class TypeAliasSpec
 private constructor(
-  builder: Builder
+  builder: Builder,
 ) : TypeSpec<TypeAliasSpec, TypeAliasSpec.Builder>(builder) {
 
   override val name = builder.name
@@ -58,7 +58,7 @@ private constructor(
 
   class Builder internal constructor(
     name: String,
-    internal val type: TypeName
+    internal val type: TypeName,
   ) : TypeSpec.Builder<TypeAliasSpec, Builder>(name) {
 
     internal val tsDoc = CodeBlock.builder()
@@ -103,7 +103,8 @@ private constructor(
 
     @JvmStatic
     fun builder(name: String, type: TypeName) = Builder(
-      name, type
+      name,
+      type,
     )
   }
 }
