@@ -57,10 +57,3 @@ jobs:
         properties: |
           ossrhUsername=${{ secrets.OSSRH_USERNAME }}
           ossrhPassword=${{ secrets.OSSRH_PASSWORD }}
-
-    - name: Publish Documentation
-      uses: JamesIves/github-pages-deploy-action@v4.5.0
-      with:
-        branch: gh-pages
-        clean: false
-        folder: build/javadoc
