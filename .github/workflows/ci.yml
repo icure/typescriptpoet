@@ -59,7 +59,7 @@ jobs:
           ossrhPassword=${{ secrets.OSSRH_PASSWORD }}
 
     - name: Publish Documentation
-      uses: JamesIves/github-pages-deploy-action@4.5.0
+      uses: JamesIves/github-pages-deploy-action@v4.5.0
       with:
         branch: gh-pages
         clean: false
