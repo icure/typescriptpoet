@@ -4,7 +4,6 @@ plugins {
   jacoco
 
   kotlin("jvm") version "1.9.22"
-  id("org.jetbrains.dokka") version "1.9.20"
 
   id("org.jmailen.kotlinter") version "4.3.0"
 
@@ -74,7 +73,6 @@ java {
   targetCompatibility = javaVersion
 
   withSourcesJar()
-  withJavadocJar()
 }
 
 tasks {
