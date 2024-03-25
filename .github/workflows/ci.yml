@@ -48,12 +48,3 @@ jobs:
       with:
         job-id: jdk8-build-test
         arguments: build -x test
-
-    - name: Publish Maven (Snapshot)
-      uses: burrunan/gradle-cache-action@v1
-      with:
-        job-id: jdk8-build-test
-        arguments: publishMavenRelease
-        properties: |
-          ossrhUsername=${{ secrets.OSSRH_USERNAME }}
-          ossrhPassword=${{ secrets.OSSRH_PASSWORD }}

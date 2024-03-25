@@ -26,15 +26,13 @@ jobs:
     - name: Publish Maven
       uses: burrunan/gradle-cache-action@v1
       env:
-        ORG_GRADLE_PROJECT_signingKey: ${{ secrets.SIGNING_SIGNING_KEY }}
-        ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.SIGNING_PASSWORD }}
+          OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+          OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
+          SIGNING_SIGNING_KEY: ${{ secrets.SIGNING_SIGNING_KEY }}
+          SIGNING_PASSWORD: ${{ secrets.SIGNING_PASSWORD }}
       with:
         job-id: jdk8-build-test
         arguments: >-
-          build
-          publishRelease
-          -x test
+          publishAllPublicationToSonatypeRepository --max-workers 1 closeAndReleaseSonatypeStagingRepository
         properties: |
           releaseVersion=${{ steps.tagName.outputs.tag }}
-          ossrhUsername=${{ secrets.OSSRH_USERNAME }}
-          ossrhPassword=${{ secrets.OSSRH_PASSWORD }}

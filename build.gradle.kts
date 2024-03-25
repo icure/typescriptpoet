@@ -108,112 +108,23 @@ tasks {
   }
 }
 
-
-//
-// DOCS
-//
-
-tasks {
-  dokkaHtml {
-    outputDirectory.set(file("$buildDir/javadoc/$releaseVersion"))
-  }
-
-  javadoc {
-    dependsOn(dokkaHtml)
-  }
-}
-
 //
 // PUBLISHING
 //
 
 publishing {
-
   publications {
-
-    create<MavenPublication>("library") {
+    create<MavenPublication>("maven") {
       from(components["java"])
 
       pom {
         name.set("TypeScript Poet")
         description.set("TypeScriptPoet is a Kotlin and Java API for generating .ts source files.")
-        url.set("https://github.com/voize-gmbh/typescriptpoet")
-
-        scm {
-            url.set("https://github.com/voize-gmbh/reakt-native-toolkit")
-        }
-
-        licenses {
-          license {
-            name.set("Apache-2.0")
-            url.set("https://opensource.org/licenses/Apache-2.0")
-          }
-        }
-        developers {
-          developer {
-            id.set("LeonKiefer")
-            name.set("Leon Kiefer")
-            email.set("leon@voize.de")
-          }
-          developer {
-            id.set("ErikZiegler")
-            name.set("Erik Ziegler")
-            email.set("erik@voize.de")
-          }
-        }
       }
     }
   }
-
-  repositories {
-
-    maven {
-      name = "MavenCentral"
-      val snapshotUrl = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
-      val releaseUrl = "https://s01.oss.sonatype.org/service/local/"
-      url = uri(if (isSnapshot) snapshotUrl else releaseUrl)
-
-      credentials {
-        username = project.findProperty("ossrhUsername")?.toString()
-        password = project.findProperty("ossrhPassword")?.toString()
-      }
-    }
-
-  }
-
-}
-
-signing {
-  if (!hasProperty("signing.keyId")) {
-    val signingKey: String? by project
-    val signingPassword: String? by project
-    useInMemoryPgpKeys(signingKey, signingPassword)
-  }
-  sign(publishing.publications["library"])
 }
 
 tasks.withType<Sign>().configureEach {
   onlyIf { !isSnapshot }
-}
-
-
-//
-// RELEASING
-//
-
-
-tasks {
-
-  register("publishMavenRelease") {
-    dependsOn(
-      "publishAllPublicationsToMavenCentralRepository"
-    )
-  }
-
-  register("publishRelease") {
-    dependsOn(
-      "publishMavenRelease",
-    )
-  }
-
 }

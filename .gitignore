@@ -137,4 +137,4 @@ gradle-app.setting
 
 run
 /.idea
-/bin
+bin/
