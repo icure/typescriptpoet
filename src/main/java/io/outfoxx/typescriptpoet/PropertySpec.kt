@@ -19,7 +19,7 @@ package io.outfoxx.typescriptpoet
 /** A generated property declaration. */
 class PropertySpec
 private constructor(
-  builder: Builder
+  builder: Builder,
 ) : Taggable(builder.tags.toImmutableMap()) {
 
   val name = builder.name
@@ -44,7 +44,7 @@ private constructor(
       CodeBlock.of(
         "%L${if (optional && compactOptionalAllowed) "?" else ""}: %T${if (optional && !compactOptionalAllowed) " | undefined" else ""}",
         name,
-        type
+        type,
       ),
     )
     if (withInitializer && initializer != null) {
@@ -71,7 +71,7 @@ private constructor(
   class Builder internal constructor(
     internal val name: String,
     internal val type: TypeName,
-    internal var optional: Boolean
+    internal var optional: Boolean,
   ) : Taggable.Builder<Builder>() {
 
     internal val tsDoc = CodeBlock.builder()
@@ -104,7 +104,7 @@ private constructor(
     }
 
     fun initializer(format: String, vararg args: Any?) = initializer(
-      CodeBlock.of(format, *args)
+      CodeBlock.of(format, *args),
     )
 
     fun initializer(codeBlock: CodeBlock) = apply {

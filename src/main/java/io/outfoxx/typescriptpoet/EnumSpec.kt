@@ -19,7 +19,7 @@ package io.outfoxx.typescriptpoet
 /** A generated `enum` declaration. */
 class EnumSpec
 private constructor(
-  builder: Builder
+  builder: Builder,
 ) : TypeSpec<EnumSpec, EnumSpec.Builder>(builder) {
 
   override val name = builder.name
@@ -28,7 +28,6 @@ private constructor(
   val constants = builder.constants.toImmutableMap()
 
   override fun emit(codeWriter: CodeWriter) {
-
     codeWriter.emitTSDoc(tsDoc)
     codeWriter.emitModifiers(modifiers, setOf())
     codeWriter.emitCode(CodeBlock.of("enum %L {\n", name))
@@ -67,7 +66,7 @@ private constructor(
   class Builder
   internal constructor(
     name: String,
-    val constants: MutableMap<String, CodeBlock?> = mutableMapOf()
+    val constants: MutableMap<String, CodeBlock?> = mutableMapOf(),
   ) : TypeSpec.Builder<EnumSpec, Builder>(name) {
 
     internal val tsDoc = CodeBlock.builder()

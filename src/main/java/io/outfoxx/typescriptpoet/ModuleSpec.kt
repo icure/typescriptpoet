@@ -19,24 +19,23 @@ package io.outfoxx.typescriptpoet
 /** A generated `module` declaration. */
 class ModuleSpec
 private constructor(
-  builder: Builder
-) : Taggable(builder.tags.toImmutableMap()) {
+  builder: Builder,
+) : TypeSpec<ModuleSpec, ModuleSpec.Builder>(builder) {
 
   enum class Kind(val keyword: String) {
     MODULE("module"),
-    NAMESPACE("namespace")
+    NAMESPACE("namespace"),
   }
 
-  val name = builder.name
+  override val name = builder.name
   val tsDoc = builder.tsDoc.build()
   val modifiers = builder.modifiers.toImmutableList()
   val members = builder.members.toImmutableList()
   val kind = builder.kind
 
-  internal fun emit(codeWriter: CodeWriter) {
+  override fun emit(codeWriter: CodeWriter) {
     codeWriter.pushScope(name)
     try {
-
       if (tsDoc.isNotEmpty()) {
         codeWriter.emitComment(tsDoc)
       }
@@ -99,9 +98,9 @@ private constructor(
 
   open class Builder
   internal constructor(
-    internal val name: String,
-    internal val kind: Kind = Kind.NAMESPACE
-  ) : Taggable.Builder<Builder>() {
+    name: String,
+    internal val kind: Kind = Kind.NAMESPACE,
+  ) : TypeSpec.Builder<ModuleSpec, Builder>(name) {
 
     internal val tsDoc = CodeBlock.builder()
     internal val modifiers = mutableSetOf<Modifier>()
@@ -116,7 +115,7 @@ private constructor(
         Modifier.READONLY,
         Modifier.GET,
         Modifier.SET,
-        Modifier.STATIC
+        Modifier.STATIC,
       )
     }
 
@@ -130,8 +129,9 @@ private constructor(
 
     fun addModifier(modifier: Modifier) = apply {
       requireNoneOrOneOf(
-        modifiers + modifier, Modifier.EXPORT,
-        Modifier.DECLARE
+        modifiers + modifier,
+        Modifier.EXPORT,
+        Modifier.DECLARE,
       )
       modifiers += modifier
     }
@@ -161,6 +161,7 @@ private constructor(
         is InterfaceSpec -> addInterface(typeSpec)
         is ClassSpec -> addClass(typeSpec)
         is TypeAliasSpec -> addTypeAlias(typeSpec)
+        is ModuleSpec -> addModule(typeSpec)
       }
     }
 
@@ -173,9 +174,10 @@ private constructor(
 
     fun addProperty(propertySpec: PropertySpec) = apply {
       requireExactlyOneOf(
-        propertySpec.modifiers, Modifier.CONST,
+        propertySpec.modifiers,
+        Modifier.CONST,
         Modifier.LET,
-        Modifier.VAR
+        Modifier.VAR,
       )
       require(propertySpec.decorators.isEmpty()) { "decorators on file properties are not allowed" }
       checkMemberModifiers(propertySpec.modifiers)
@@ -198,7 +200,7 @@ private constructor(
       return !isEmpty()
     }
 
-    fun build() = ModuleSpec(this)
+    override fun build() = ModuleSpec(this)
   }
 
   companion object {

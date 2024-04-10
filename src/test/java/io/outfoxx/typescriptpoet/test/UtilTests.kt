@@ -25,32 +25,31 @@ class UtilTests {
 
   @Test
   fun testDropCommon() {
-
     val full = listOf("a", "b", "c", "d")
 
     assertThat(
       full.dropCommon(listOf("a", "b")),
-      equalTo(listOf("c", "d"))
+      equalTo(listOf("c", "d")),
     )
 
     assertThat(
       full.dropCommon(listOf("a")),
-      equalTo(listOf("b", "c", "d"))
+      equalTo(listOf("b", "c", "d")),
     )
 
     assertThat(
       full.dropCommon(listOf("a", "b", "c", "d")),
-      equalTo(listOf())
+      equalTo(listOf()),
     )
 
     assertThat(
       full.dropCommon(listOf("A", "b")),
-      equalTo(listOf("a", "b", "c", "d"))
+      equalTo(listOf("a", "b", "c", "d")),
     )
 
     assertThat(
       full.dropCommon(listOf("a", "b", "c", "d", "e")),
-      equalTo(listOf("a", "b", "c", "d"))
+      equalTo(listOf("a", "b", "c", "d")),
     )
   }
 }

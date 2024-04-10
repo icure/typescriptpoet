@@ -64,8 +64,8 @@ class InterfaceSpecTests {
             interface Test {
             }
 
-        """.trimIndent()
-      )
+        """.trimIndent(),
+      ),
     )
   }
 
@@ -86,8 +86,8 @@ class InterfaceSpecTests {
             export interface Test {
             }
 
-        """.trimIndent()
-      )
+        """.trimIndent(),
+      ),
     )
   }
 
@@ -96,13 +96,13 @@ class InterfaceSpecTests {
   fun testGenTypeVars() {
     val testIface = InterfaceSpec.builder("Test")
       .addTypeVariable(
-        TypeName.typeVariable("X", TypeName.bound(TypeName.implicit("Test2")))
+        TypeName.typeVariable("X", TypeName.bound(TypeName.implicit("Test2"))),
       )
       .addTypeVariable(
-        TypeName.typeVariable("Y", TypeName.bound(TypeName.implicit("Test3")), TypeName.intersectBound(TypeName.implicit("Test4")))
+        TypeName.typeVariable("Y", TypeName.bound(TypeName.implicit("Test3")), TypeName.intersectBound(TypeName.implicit("Test4"))),
       )
       .addTypeVariable(
-        TypeName.typeVariable("Z", TypeName.bound(TypeName.implicit("Test5")), TypeName.unionBound(TypeName.implicit("Test6"), true))
+        TypeName.typeVariable("Z", TypeName.bound(TypeName.implicit("Test5")), TypeName.unionBound(TypeName.implicit("Test6"), true)),
       )
       .build()
 
@@ -116,8 +116,8 @@ class InterfaceSpecTests {
             interface Test<X extends Test2, Y extends Test3 & Test4, Z extends Test5 | keyof Test6> {
             }
 
-        """.trimIndent()
-      )
+        """.trimIndent(),
+      ),
     )
   }
 
@@ -139,8 +139,8 @@ class InterfaceSpecTests {
             interface Test extends Test2, Test3 {
             }
 
-        """.trimIndent()
-      )
+        """.trimIndent(),
+      ),
     )
   }
 
@@ -149,7 +149,7 @@ class InterfaceSpecTests {
   fun testGenTypeVarsAndSuperInterfacesFormatted() {
     val testIface = InterfaceSpec.builder("Test")
       .addTypeVariable(
-        TypeName.typeVariable("Y", TypeName.bound(TypeName.implicit("Test3")), TypeName.intersectBound(TypeName.implicit("Test4")))
+        TypeName.typeVariable("Y", TypeName.bound(TypeName.implicit("Test3")), TypeName.intersectBound(TypeName.implicit("Test4"))),
       )
       .addSuperInterface(TypeName.implicit("Test2"))
       .addSuperInterface(TypeName.implicit("Test3"))
@@ -166,8 +166,8 @@ class InterfaceSpecTests {
             interface Test<Y extends Test3 & Test4> extends Test2, Test3, Test4 {
             }
 
-        """.trimIndent()
-      )
+        """.trimIndent(),
+      ),
     )
   }
 
@@ -194,8 +194,8 @@ class InterfaceSpecTests {
 
             }
 
-        """.trimIndent()
-      )
+        """.trimIndent(),
+      ),
     )
   }
 
@@ -206,12 +206,12 @@ class InterfaceSpecTests {
       .addFunction(
         FunctionSpec.builder("test1")
           .addModifiers(Modifier.ABSTRACT)
-          .build()
+          .build(),
       )
       .addFunction(
         FunctionSpec.builder("test2")
           .addModifiers(Modifier.ABSTRACT)
-          .build()
+          .build(),
       )
       .build()
 
@@ -230,8 +230,8 @@ class InterfaceSpecTests {
 
             }
 
-        """.trimIndent()
-      )
+        """.trimIndent(),
+      ),
     )
   }
 
@@ -244,14 +244,14 @@ class InterfaceSpecTests {
           .addModifiers(Modifier.ABSTRACT)
           .addParameter("idx", TypeName.STRING)
           .returns(TypeName.ANY)
-          .build()
+          .build(),
       )
       .addIndexable(
         FunctionSpec.indexableBuilder()
           .addModifiers(Modifier.READONLY, Modifier.ABSTRACT)
           .addParameter("idx", TypeName.STRING)
           .returns(TypeName.ANY)
-          .build()
+          .build(),
       )
       .build()
 
@@ -270,8 +270,8 @@ class InterfaceSpecTests {
 
             }
 
-        """.trimIndent()
-      )
+        """.trimIndent(),
+      ),
     )
   }
 
@@ -284,7 +284,7 @@ class InterfaceSpecTests {
           .addModifiers(Modifier.ABSTRACT)
           .addParameter("a", TypeName.STRING)
           .returns(TypeName.implicit("Test"))
-          .build()
+          .build(),
       )
       .build()
 
@@ -301,8 +301,8 @@ class InterfaceSpecTests {
 
             }
 
-        """.trimIndent()
-      )
+        """.trimIndent(),
+      ),
     )
   }
 
@@ -313,7 +313,7 @@ class InterfaceSpecTests {
       .addTSDoc("this is a comment\n")
       .addModifiers(Modifier.ABSTRACT, Modifier.EXPORT)
       .addTypeVariable(
-        TypeName.typeVariable("X", TypeName.bound(TypeName.implicit("Test2")))
+        TypeName.typeVariable("X", TypeName.bound(TypeName.implicit("Test2"))),
       )
       .addSuperInterface(TypeName.implicit("Test3"))
       .addProperty("value", TypeName.NUMBER, false, Modifier.PRIVATE)
@@ -321,19 +321,19 @@ class InterfaceSpecTests {
       .addFunction(
         FunctionSpec.builder("test1")
           .addModifiers(Modifier.ABSTRACT)
-          .build()
+          .build(),
       )
       .addIndexable(
         FunctionSpec.indexableBuilder()
           .addModifiers(Modifier.ABSTRACT)
           .addParameter("idx", TypeName.STRING)
           .returns(TypeName.ANY)
-          .build()
+          .build(),
       )
       .callable(
         FunctionSpec.callableBuilder()
           .addModifiers(Modifier.ABSTRACT)
-          .build()
+          .build(),
       )
       .build()
       .toBuilder()
@@ -344,8 +344,8 @@ class InterfaceSpecTests {
     assertThat(
       testIfaceBlder.superInterfaces,
       hasItems(
-        TypeName.implicit("Test3")
-      )
+        TypeName.implicit("Test3"),
+      ),
     )
     assertThat(testIfaceBlder.propertySpecs.map { it.name }, hasItems("value", "value2"))
     assertThat(testIfaceBlder.functionSpecs.map { it.name }, hasItems("test1"))

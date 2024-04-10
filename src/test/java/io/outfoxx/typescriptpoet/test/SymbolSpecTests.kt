@@ -29,7 +29,6 @@ class SymbolSpecTests {
   @Test
   @DisplayName("Parsing implicitly defined (non-imported) symbols")
   fun testParsingImplicit() {
-
     val parsed = SymbolSpec.from("Some.Symbol.Depth")
     assertThat(parsed.value, equalTo("Some.Symbol.Depth"))
   }
@@ -37,7 +36,6 @@ class SymbolSpecTests {
   @Test
   @DisplayName("Parsing named import: exported symbol implied by module path")
   fun testParsingImplicitImportNamed() {
-
     val parsed = SymbolSpec.from("@rxjs/Observable")
     assertThat(parsed, instanceOf(SymbolSpec.ImportsName::class.java))
 
@@ -49,7 +47,6 @@ class SymbolSpecTests {
   @Test
   @DisplayName("Parsing named import: exported symbol implied by generated module path")
   fun testParsingImplicitImportNamedGeneratedModule() {
-
     val parsed = SymbolSpec.from("@!Api")
     assertThat(parsed, instanceOf(SymbolSpec.ImportsName::class.java))
 
@@ -61,7 +58,6 @@ class SymbolSpecTests {
   @Test
   @DisplayName("Parsing named import: exported symbol explicit, source relative to current dir")
   fun testParsingExplicitImportNamedSourceCurrentDirectory() {
-
     val parsed = SymbolSpec.from("BackendService@./some/local/source/file")
     assertThat(parsed, instanceOf(SymbolSpec.ImportsName::class.java))
 
@@ -73,7 +69,6 @@ class SymbolSpecTests {
   @Test
   @DisplayName("Parsing named import: exported symbol explicit, source relative to parent dir")
   fun testParsingImplicitImportNamedSourceParentDirectory() {
-
     val parsed = SymbolSpec.from("BackendService@../some/local/source/file")
     assertThat(parsed, instanceOf(SymbolSpec.ImportsName::class.java))
 
@@ -85,7 +80,6 @@ class SymbolSpecTests {
   @Test
   @DisplayName("Parsing named import: exported symbol explicit, source is implied module")
   fun testParsingExplicitImportNamed() {
-
     val parsed = SymbolSpec.from("SomeOtherSymbolDepth@rxjs/Observable")
     assertThat(parsed, instanceOf(SymbolSpec.ImportsName::class.java))
 
@@ -97,7 +91,6 @@ class SymbolSpecTests {
   @Test
   @DisplayName("Parsing all import: exported symbol implied by module path")
   fun testParsingImplicitImportAll() {
-
     val parsed = SymbolSpec.from("*rxjs/Observable")
     assertThat(parsed, instanceOf(SymbolSpec.ImportsAll::class.java))
 
@@ -109,7 +102,6 @@ class SymbolSpecTests {
   @Test
   @DisplayName("Parsing all import: exported symbol explicit, source is implied module")
   fun testParsingExplicitImportAll() {
-
     val parsed = SymbolSpec.from("SomeOther*rxjs/Observable")
     assertThat(parsed, instanceOf(SymbolSpec.ImportsAll::class.java))
 
@@ -121,7 +113,6 @@ class SymbolSpecTests {
   @Test
   @DisplayName("Parsing side effect import: exported symbol made available as side effect of import")
   fun testParsingSymbolViaSideEffect() {
-
     val parsed = SymbolSpec.from("describe+mocha")
     assertThat(parsed, instanceOf(SymbolSpec.SideEffect::class.java))
 
@@ -133,7 +124,6 @@ class SymbolSpecTests {
   @Test
   @DisplayName("Parsing augmentation import: exported symbol implied by module path")
   fun testParsingImplicitAugmentationWithAssociatedSymbol() {
-
     val parsed = SymbolSpec.from("+rxjs/add/operator/toPromise#Observable")
     assertThat(parsed, instanceOf(SymbolSpec.Augmented::class.java))
 
@@ -146,7 +136,6 @@ class SymbolSpecTests {
   @Test
   @DisplayName("Parsing augmentation import: exported symbol explicit")
   fun testParsingExplicitAugmentationWithAssociatedSymbol() {
-
     val parsed = SymbolSpec.from("SomeSymbol+rxjs/add/operator/toPromise#Observable")
     assertThat(parsed, instanceOf(SymbolSpec.Augmented::class.java))
 

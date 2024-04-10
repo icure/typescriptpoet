@@ -61,8 +61,8 @@ class TypeAliasSpecTests {
              */
             type Integer = number;
 
-        """.trimIndent()
-      )
+        """.trimIndent(),
+      ),
     )
   }
 
@@ -82,8 +82,8 @@ class TypeAliasSpecTests {
         """
             export type Integer = number;
 
-        """.trimIndent()
-      )
+        """.trimIndent(),
+      ),
     )
   }
 
@@ -102,8 +102,8 @@ class TypeAliasSpecTests {
         """
             type Integer = number;
 
-        """.trimIndent()
-      )
+        """.trimIndent(),
+      ),
     )
   }
 
@@ -113,14 +113,15 @@ class TypeAliasSpecTests {
     val typeVar = TypeName.typeVariable(
       "A",
       TypeName.bound(
-        TypeName.implicit("Test")
-      )
+        TypeName.implicit("Test"),
+      ),
     )
     val testAlias = TypeAliasSpec.builder(
       "StringMap",
       TypeName.mapType(
-        TypeName.STRING, typeVar
-      )
+        TypeName.STRING,
+        typeVar,
+      ),
     )
       .addTypeVariable(typeVar)
       .build()
@@ -134,8 +135,8 @@ class TypeAliasSpecTests {
         """
             type StringMap<A extends Test> = Map<string, A>;
 
-        """.trimIndent()
-      )
+        """.trimIndent(),
+      ),
     )
   }
 
@@ -149,9 +150,9 @@ class TypeAliasSpecTests {
         TypeName.typeVariable(
           "A",
           TypeName.bound(
-            TypeName.implicit("Test")
-          )
-        )
+            TypeName.implicit("Test"),
+          ),
+        ),
       )
       .build()
       .toBuilder()

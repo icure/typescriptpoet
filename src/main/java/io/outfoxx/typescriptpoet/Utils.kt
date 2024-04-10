@@ -184,5 +184,5 @@ private val KEYWORDS = setOf(
   "do",
   "when",
   "interface",
-  "typeof"
+  "typeof",
 )

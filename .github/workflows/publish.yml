@@ -11,11 +11,12 @@ jobs:
 
     steps:
 
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
 
-    - uses: actions/setup-java@v1
+    - uses: actions/setup-java@v4
       with:
-        java-version: '11'
+        java-version: '17'
+        distribution: 'corretto'
 
     - uses: olegtarasov/get-tag@v2.1
       id: tagName
@@ -25,30 +26,13 @@ jobs:
     - name: Publish Maven
       uses: burrunan/gradle-cache-action@v1
       env:
-        ORG_GRADLE_PROJECT_signingKeyId: ${{ secrets.OSSRH_GPG_SECRET_KEY_ID }}
-        ORG_GRADLE_PROJECT_signingKey: ${{ secrets.OSSRH_GPG_SECRET_KEY }}
-        ORG_GRADLE_PROJECT_signingPassword: ${{ secrets.OSSRH_GPG_SECRET_KEY_PASSWORD }}
+          OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+          OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
+          SIGNING_SIGNING_KEY: ${{ secrets.SIGNING_SIGNING_KEY }}
+          SIGNING_PASSWORD: ${{ secrets.SIGNING_PASSWORD }}
       with:
         job-id: jdk8-build-test
         arguments: >-
-          build
-          publishRelease
-          -x test
+          publishAllPublicationsToSonatypeRepository --max-workers 1 closeAndReleaseSonatypeStagingRepository
         properties: |
           releaseVersion=${{ steps.tagName.outputs.tag }}
-          ossrhUsername=${{ secrets.OSSRH_USER }}
-          ossrhPassword=${{ secrets.OSSRH_PASS }}
-          github.token=${{ secrets.GITHUB_TOKEN }}
-
-    - name: Build Docs
-      uses: burrunan/gradle-cache-action@v1
-      with:
-        job-id: jdk8-build-test
-        arguments: dokkaHtml
-
-    - name: Publish Documentation
-      uses: JamesIves/github-pages-deploy-action@4.0.0
-      with:
-        branch: gh-pages
-        clean: false
-        folder: build/javadoc

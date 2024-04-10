@@ -51,20 +51,7 @@ sealed class TypeName {
     fun parameterized(vararg typeArgs: TypeName) = parameterizedType(this, *typeArgs)
 
     override fun emit(codeWriter: CodeWriter) {
-      val fullPath = base.value.split(".")
-      val relativePath = fullPath.dropCommon(codeWriter.currentScope())
-      val relativeName =
-        if (relativePath.isNotEmpty()) {
-          relativePath.joinToString(".")
-        } else {
-          fullPath.last()
-        }
-
-      if (relativeName == base.value) {
-        codeWriter.emitSymbol(base)
-      } else {
-        codeWriter.emitSymbol(SymbolSpec.implicit(relativeName))
-      }
+      codeWriter.emitSymbol(base)
     }
 
     override fun toString() = buildCodeString { emit(this) }
@@ -73,7 +60,7 @@ sealed class TypeName {
   data class Parameterized
   internal constructor(
     val rawType: Standard,
-    val typeArgs: List<TypeName>
+    val typeArgs: List<TypeName>,
   ) : TypeName() {
 
     override fun emit(codeWriter: CodeWriter) {
@@ -93,28 +80,28 @@ sealed class TypeName {
   data class TypeVariable
   internal constructor(
     val name: String,
-    val bounds: List<Bound>
+    val bounds: List<Bound>,
   ) : TypeName() {
 
     data class Bound(
       val type: TypeName,
       val combiner: Combiner = UNION,
-      val modifier: Modifier?
+      val modifier: Modifier?,
     ) {
 
       enum class Combiner(
-        val symbol: String
+        val symbol: String,
       ) {
 
         UNION("|"),
-        INTERSECT("&")
+        INTERSECT("&"),
       }
 
       enum class Modifier(
-        val keyword: String
+        val keyword: String,
       ) {
 
-        KEY_OF("keyof")
+        KEY_OF("keyof"),
       }
     }
 
@@ -127,13 +114,13 @@ sealed class TypeName {
 
   data class Anonymous
   internal constructor(
-    val members: List<Member>
+    val members: List<Member>,
   ) : TypeName() {
 
     data class Member(
       val name: String,
       val type: TypeName,
-      val optional: Boolean
+      val optional: Boolean,
     )
 
     override fun emit(codeWriter: CodeWriter) {
@@ -158,7 +145,7 @@ sealed class TypeName {
 
   data class Tuple
   internal constructor(
-    val memberTypes: List<TypeName>
+    val memberTypes: List<TypeName>,
   ) : TypeName() {
 
     override fun emit(codeWriter: CodeWriter) {
@@ -178,7 +165,7 @@ sealed class TypeName {
 
   data class Intersection
   internal constructor(
-    val typeRequirements: List<TypeName>
+    val typeRequirements: List<TypeName>,
   ) : TypeName() {
 
     override fun emit(codeWriter: CodeWriter) {
@@ -196,7 +183,7 @@ sealed class TypeName {
 
   data class Union
   internal constructor(
-    val typeChoices: List<TypeName>
+    val typeChoices: List<TypeName>,
   ) : TypeName() {
 
     override fun emit(codeWriter: CodeWriter) {
@@ -215,7 +202,7 @@ sealed class TypeName {
   data class Lambda
   internal constructor(
     private val parameters: Map<String, TypeName> = emptyMap(),
-    private val returnType: TypeName = VOID
+    private val returnType: TypeName = VOID,
   ) : TypeName() {
 
     override fun emit(codeWriter: CodeWriter) {
@@ -343,7 +330,8 @@ sealed class TypeName {
     @JvmStatic
     fun arrayType(elementType: TypeName): TypeName {
       return parameterizedType(
-        ARRAY, elementType
+        ARRAY,
+        elementType,
       )
     }
 
@@ -356,7 +344,8 @@ sealed class TypeName {
     @JvmStatic
     fun setType(elementType: TypeName): TypeName {
       return parameterizedType(
-        SET, elementType
+        SET,
+        elementType,
       )
     }
 
@@ -370,7 +359,9 @@ sealed class TypeName {
     @JvmStatic
     fun mapType(keyType: TypeName, valueType: TypeName): TypeName {
       return parameterizedType(
-        MAP, keyType, valueType
+        MAP,
+        keyType,
+        valueType,
       )
     }
 
@@ -407,7 +398,7 @@ sealed class TypeName {
     fun bound(
       type: TypeName,
       combiner: Combiner = UNION,
-      modifier: Bound.Modifier? = null
+      modifier: Bound.Modifier? = null,
     ): Bound {
       return Bound(type, combiner, modifier)
     }

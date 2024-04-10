@@ -35,7 +35,7 @@ import java.nio.file.Paths
  */
 class FileSpec
 private constructor(
-  builder: Builder
+  builder: Builder,
 ) : Taggable(builder.tags.toImmutableMap()) {
 
   val modulePath = builder.modulePath
@@ -45,28 +45,13 @@ private constructor(
 
   @Throws(IOException::class)
   fun writeTo(out: Appendable, directory: Path = Paths.get("/")) {
-    // First pass: emit the entire file, just to collect the symbols we'll need to import.
-    val importsCollector = CodeWriter(NullAppendable, indent)
-    importsCollector.use { emit(it, directory) }
-
     val absPath = directory.resolve(modulePath).toAbsolutePath()
 
-    val importedSymbols =
-      importsCollector.referencedSymbols<SymbolSpec.Imported>()
-        .filter { // Include only imports from other files
-          when {
-            it.source.startsWith("./") -> {
-              val absImportPath = absPath.resolve(it.source).toAbsolutePath().normalize()
-              absImportPath != absPath
-            }
-            it.source.startsWith("!") -> {
-              val absImportPath = directory.resolve(it.source.removePrefix("!")).toAbsolutePath().normalize()
-              absImportPath != absPath
-            }
-            else -> true
-          }
-        }
-        .toSet()
+    // First pass: emit the entire file, just to collect the symbols we'll need to import.
+    val importsCollector = CodeWriter(NullAppendable, indent, absPath = absPath, directory = directory)
+    importsCollector.use { emit(it, directory) }
+
+    val importedSymbols = importsCollector.referencedSymbols<SymbolSpec.Imported>().toSet()
 
     // Pass local type name & imports to name allocator to resolve collisions
     val topLevelNameAllocator = NameAllocator()
@@ -92,7 +77,7 @@ private constructor(
         .filter { it.key.value != it.value }
 
     // Second pass: write the code, taking advantage of the imports.
-    CodeWriter(out, indent, renamedSymbols).use {
+    CodeWriter(out, indent, renamedSymbols, absPath = absPath, directory = directory).use {
       emit(it, directory, importedSymbols)
     }
   }
@@ -117,7 +102,6 @@ private constructor(
   fun writeTo(directory: File) = writeTo(directory.toPath())
 
   private fun emit(codeWriter: CodeWriter, directory: Path = Paths.get("/"), imports: Set<SymbolSpec.Imported> = emptySet()) {
-
     if (comment.isNotEmpty()) {
       codeWriter.emitComment(comment)
     }
@@ -153,7 +137,6 @@ private constructor(
   }
 
   private fun emitImports(codeWriter: CodeWriter, directory: Path, imports: Set<SymbolSpec.Imported>) {
-
     val augmentImports = imports
       .filterIsInstance<SymbolSpec.Augmented>()
       .groupBy { it.augmented }
@@ -238,7 +221,7 @@ private constructor(
   }
 
   class Builder internal constructor(
-    internal val modulePath: String
+    internal val modulePath: String,
   ) : Taggable.Builder<Builder>() {
 
     init {
@@ -261,7 +244,7 @@ private constructor(
         Modifier.STATIC,
         Modifier.CONST,
         Modifier.LET,
-        Modifier.VAR
+        Modifier.VAR,
       )
     }
 
@@ -294,6 +277,7 @@ private constructor(
         is InterfaceSpec -> addInterface(typeSpec)
         is ClassSpec -> addClass(typeSpec)
         is TypeAliasSpec -> addTypeAlias(typeSpec)
+        is ModuleSpec -> addModule(typeSpec)
       }
     }
 
@@ -306,9 +290,10 @@ private constructor(
 
     fun addProperty(propertySpec: PropertySpec) = apply {
       requireExactlyOneOf(
-        propertySpec.modifiers, Modifier.CONST,
+        propertySpec.modifiers,
+        Modifier.CONST,
         Modifier.LET,
-        Modifier.VAR
+        Modifier.VAR,
       )
       require(propertySpec.decorators.isEmpty()) { "decorators on file properties are not allowed" }
       checkMemberModifiers(propertySpec.modifiers)

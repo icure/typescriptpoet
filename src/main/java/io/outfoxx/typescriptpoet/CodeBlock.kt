@@ -336,7 +336,7 @@ private constructor(
     }
 
     private fun argToLiteral(o: Any?) = when (o) {
-      is CodeBlock -> o.toString()
+      is CodeBlock -> o
       else -> o.toString()
     }
 
@@ -396,7 +396,8 @@ private constructor(
     }
 
     fun build() = CodeBlock(
-      formatParts.toImmutableList(), args.toImmutableList(),
+      formatParts.toImmutableList(),
+      args.toImmutableList(),
     )
   }
 
@@ -423,7 +424,7 @@ private constructor(
     fun Collection<CodeBlock>.joinToCode(
       separator: CharSequence = ", ",
       prefix: CharSequence = "",
-      suffix: CharSequence = ""
+      suffix: CharSequence = "",
     ): CodeBlock {
       val formatParts = mutableListOf<String>()
 

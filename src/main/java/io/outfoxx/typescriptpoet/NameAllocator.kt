@@ -74,7 +74,7 @@ import java.util.UUID
  */
 class NameAllocator private constructor(
   private val allocatedNames: MutableSet<String>,
-  private val tagToName: MutableMap<Any, String>
+  private val tagToName: MutableMap<Any, String>,
 ) {
   constructor() : this(mutableSetOf(), mutableMapOf())
 
@@ -85,7 +85,7 @@ class NameAllocator private constructor(
    */
   @JvmOverloads fun newName(
     suggestion: String,
-    tag: Any = UUID.randomUUID().toString()
+    tag: Any = UUID.randomUUID().toString(),
   ): String {
     var result = toTypeScriptIdentifier(suggestion)
     while (result.isKeyword || !allocatedNames.add(result)) {

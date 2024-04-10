@@ -19,7 +19,7 @@ package io.outfoxx.typescriptpoet
 /** A generated function declaration. */
 class FunctionSpec
 private constructor(
-  builder: Builder
+  builder: Builder,
 ) : Taggable(builder.tags.toImmutableMap()) {
 
   val name = builder.name
@@ -138,7 +138,7 @@ private constructor(
   }
 
   class Builder internal constructor(
-    internal val name: String
+    internal val name: String,
   ) : Taggable.Builder<Builder>() {
 
     internal val tsDoc = CodeBlock.builder()
@@ -208,12 +208,14 @@ private constructor(
       type: TypeName,
       optional: Boolean = false,
       defaultValue: CodeBlock,
-      vararg modifiers: Modifier
+      vararg modifiers: Modifier,
     ) = addParameter(
       ParameterSpec.builder(
-        name, type, optional,
-        *modifiers
-      ).defaultValue(defaultValue).build()
+        name,
+        type,
+        optional,
+        *modifiers,
+      ).defaultValue(defaultValue).build(),
     )
 
     fun addParameter(name: String, type: TypeName, optional: Boolean = false, vararg modifiers: Modifier) =
@@ -290,17 +292,17 @@ private constructor(
 
     @JvmStatic
     fun constructorBuilder() = Builder(
-      CONSTRUCTOR
+      CONSTRUCTOR,
     )
 
     @JvmStatic
     fun callableBuilder() = Builder(
-      CALLABLE
+      CALLABLE,
     )
 
     @JvmStatic
     fun indexableBuilder() = Builder(
-      INDEXABLE
+      INDEXABLE,
     )
   }
 }

@@ -55,8 +55,8 @@ class DecoratorSpecTests {
           @test({
             value: 5
           })
-        """.trimIndent()
-      )
+        """.trimIndent(),
+      ),
     )
   }
 
@@ -72,8 +72,8 @@ class DecoratorSpecTests {
       equalTo(
         """
           @test(/* value */ 100, /* value2 */ 20)
-        """.trimIndent()
-      )
+        """.trimIndent(),
+      ),
     )
   }
 
@@ -89,8 +89,8 @@ class DecoratorSpecTests {
       equalTo(
         """
           @test(100, 20)
-        """.trimIndent()
-      )
+        """.trimIndent(),
+      ),
     )
   }
 
@@ -108,8 +108,8 @@ class DecoratorSpecTests {
       equalTo(
         """
           @test(100, /* value */ 20, 30, /* value2 */ 40)
-        """.trimIndent()
-      )
+        """.trimIndent(),
+      ),
     )
   }
 
@@ -127,8 +127,8 @@ class DecoratorSpecTests {
       equalTo(
         """
             @test
-        """.trimIndent()
-      )
+        """.trimIndent(),
+      ),
     )
   }
 
@@ -147,8 +147,8 @@ class DecoratorSpecTests {
       equalTo(
         """
             @test()
-        """.trimIndent()
-      )
+        """.trimIndent(),
+      ),
     )
   }
 
@@ -167,8 +167,8 @@ class DecoratorSpecTests {
       testDecBldr.parameters,
       hasItems(
         Pair("value", CodeBlock.of("100")),
-        Pair("value2", CodeBlock.of("20"))
-      )
+        Pair("value2", CodeBlock.of("20")),
+      ),
     )
     assertThat(testDecBldr.factory, equalTo(true))
   }

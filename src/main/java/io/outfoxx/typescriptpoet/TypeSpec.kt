@@ -18,7 +18,7 @@ package io.outfoxx.typescriptpoet
 
 abstract class TypeSpec<T : TypeSpec<T, B>, B : TypeSpec.Builder<T, B>>
 protected constructor(
-  builder: Builder<T, B>
+  builder: Builder<T, B>,
 ) : Taggable(builder.tags.toImmutableMap()) {
 
   abstract val name: String
@@ -28,7 +28,7 @@ protected constructor(
   override fun toString() = buildCodeString { emit(this) }
 
   abstract class Builder<T : TypeSpec<T, B>, B : Builder<T, B>>(
-    internal val name: String
+    internal val name: String,
   ) : Taggable.Builder<B>() {
 
     abstract fun build(): T
