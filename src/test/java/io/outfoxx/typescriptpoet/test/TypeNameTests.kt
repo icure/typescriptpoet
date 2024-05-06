@@ -23,6 +23,7 @@ import io.outfoxx.typescriptpoet.TypeName.Companion.BOOLEAN
 import io.outfoxx.typescriptpoet.TypeName.Companion.DATE
 import io.outfoxx.typescriptpoet.TypeName.Companion.NUMBER
 import io.outfoxx.typescriptpoet.TypeName.Companion.STRING
+import io.outfoxx.typescriptpoet.TypeName.Companion.mapType
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.CoreMatchers.hasItems
 import org.hamcrest.MatcherAssert.assertThat
@@ -75,5 +76,13 @@ class TypeNameTests {
       ),
     )
     assertThat(typeName2.toString(), equalTo("{ a?: number, B: string, c?: Date }"))
+  }
+
+  @Test
+  @DisplayName("Typed pojos produce valid syntax")
+  fun testPojos() {
+    val typeName = TypeName.pojoType(STRING, mapType(STRING, NUMBER), "option")
+    val code = typeName.toString()
+    assertThat(code, equalTo("{ [ option: string ]: Map<string, number> }"))
   }
 }

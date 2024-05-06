@@ -77,6 +77,24 @@ sealed class TypeName {
     }
   }
 
+  data class TypedPojo
+  internal constructor(
+    val keyName: String = "key",
+    val key: Standard,
+    val value: TypeName,
+  ) : TypeName() {
+
+    override fun emit(codeWriter: CodeWriter) {
+      codeWriter.emit("{ [ ${keyName}: ")
+      key.emit(codeWriter)
+      codeWriter.emit(" ]: ")
+      value.emit(codeWriter)
+      codeWriter.emit(" }")
+    }
+
+    override fun toString() = buildCodeString { emit(this) }
+  }
+
   data class TypeVariable
   internal constructor(
     val name: String,
@@ -360,6 +378,22 @@ sealed class TypeName {
     fun mapType(keyType: TypeName, valueType: TypeName): TypeName {
       return parameterizedType(
         MAP,
+        keyType,
+        valueType,
+      )
+    }
+
+    /**
+     * Type name for the generic Map type
+     *
+     * @param keyType Key type of the map
+     * @param valueType Value type of the map
+     * @return Type name of the new map type
+     */
+    @JvmStatic
+    fun pojoType(keyType: Standard, valueType: TypeName, keyName: String = "key"): TypeName {
+      return TypedPojo(
+        keyName,
         keyType,
         valueType,
       )
