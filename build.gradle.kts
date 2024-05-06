@@ -6,16 +6,19 @@ plugins {
   kotlin("jvm") version "1.9.22"
 
   id("org.jmailen.kotlinter") version "4.3.0"
+  `maven-publish`
 
-  id("convention.publication")
 }
 
 
 val releaseVersion: String by project
 val isSnapshot = releaseVersion.endsWith("SNAPSHOT")
+val repoUsername: String by project
+val repoPassword: String by project
+val mavenReleasesRepository: String by project
 
 
-group = "de.voize"
+group = "io.icure"
 version = releaseVersion
 description = "A Kotlin/Java API for generating .ts source files."
 
@@ -66,7 +69,7 @@ dependencies {
 // COMPILE
 //
 
-val javaVersion = JavaVersion.VERSION_1_8
+val javaVersion = JavaVersion.VERSION_21
 
 java {
   sourceCompatibility = javaVersion
@@ -112,14 +115,21 @@ tasks {
 publishing {
   publications {
     create<MavenPublication>("maven") {
+      artifactId = "typescript-poet"
       from(components["java"])
-
-      pom {
-        name.set("TypeScript Poet")
-        description.set("TypeScriptPoet is a Kotlin and Java API for generating .ts source files.")
+    }
+  }
+  repositories {
+    maven {
+      name = "Taktik"
+      url = uri(mavenReleasesRepository)
+      credentials {
+        username = repoUsername
+        password = repoPassword
       }
     }
   }
+
 }
 
 tasks.withType<Sign>().configureEach {
