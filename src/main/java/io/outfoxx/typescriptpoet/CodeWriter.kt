@@ -129,24 +129,22 @@ internal class CodeWriter(
     emit("<")
     typeVariables.forEachIndexed { index, typeVariable ->
       if (index > 0) emit(", ")
-      emitCode(
-        CodeBlock.of(
-          buildString {
-            append(typeVariable.name)
-            if (typeVariable.bounds.isNotEmpty()) {
-              val parts = mutableListOf<String>()
-              parts.add(" extends")
-              typeVariable.bounds.forEachIndexed { index, bound ->
-                if (index > 0) parts.add(bound.combiner.symbol)
-                bound.modifier?.let { parts.add(it.keyword) }
-                parts.add("${bound.type}")
-              }
-              append(parts.joinToString(" "))
-            }
-          },
-          *typeVariable.bounds.map { it.type }.toTypedArray(),
-        ),
-      )
+      emit(typeVariable.name)
+      if (typeVariable.bounds.isNotEmpty()) {
+        emit(" extends")
+        typeVariable.bounds.forEachIndexed { boundIndex, bound ->
+          emit(" ")
+          if (boundIndex > 0) {
+            emit(bound.combiner.symbol)
+            emit(" ")
+          }
+          bound.modifier?.let {
+            emit(it.keyword)
+            emit(" ")
+          }
+          bound.type.emit(this)
+        }
+      }
     }
     emit(">")
   }
