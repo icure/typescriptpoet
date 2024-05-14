@@ -75,6 +75,8 @@ sealed class TypeName {
       }
       codeWriter.emit(">")
     }
+
+    override fun toString() = buildCodeString { emit(this) }
   }
 
   data class TypedPojo
@@ -91,8 +93,6 @@ sealed class TypeName {
       value.emit(codeWriter)
       codeWriter.emit(" }")
     }
-
-    override fun toString() = buildCodeString { emit(this) }
   }
 
   data class TypeVariable
