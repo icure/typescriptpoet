@@ -95,6 +95,25 @@ sealed class TypeName {
     }
   }
 
+  data class BoundPojo
+  internal constructor(
+    val keyName: String,
+    val keyBound: TypeName,
+    val value: TypeName,
+    val partial: Boolean
+  ) : TypeName() {
+
+    override fun emit(codeWriter: CodeWriter) {
+      codeWriter.emit("{ [ ${keyName} in ")
+      keyBound.emit(codeWriter)
+      codeWriter.emit(" ]")
+      if (partial) codeWriter.emit("?")
+      codeWriter.emit(": ")
+      value.emit(codeWriter)
+      codeWriter.emit(" }")
+    }
+  }
+
   data class TypeVariable
   internal constructor(
     val name: String,
@@ -396,6 +415,24 @@ sealed class TypeName {
         keyName,
         keyType,
         valueType,
+      )
+    }
+
+    /**
+     * Type name for the generic Map type, bound by a certain type
+     *
+     * @param keyType Key type of the map
+     * @param valueType Value type of the map
+     * @param keyName Name of the key variable
+     * @param partial Whether the map is partial (it does not need to contain all possible values of the key type)
+     * @return Type name of the new map type
+     */
+    fun keyboundPojoType(keyType: TypeName, valueType: TypeName, keyName: String = "key", partial: Boolean = true): TypeName {
+      return BoundPojo(
+        keyName,
+        keyType,
+        valueType,
+        partial
       )
     }
 
