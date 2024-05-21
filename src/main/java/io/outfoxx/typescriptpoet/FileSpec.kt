@@ -116,6 +116,7 @@ private constructor(
         is ModuleSpec -> member.emit(codeWriter)
         is InterfaceSpec -> member.emit(codeWriter)
         is ClassSpec -> member.emit(codeWriter)
+        is SingletonSpec -> member.emit(codeWriter)
         is EnumSpec -> member.emit(codeWriter)
         is FunctionSpec -> member.emit(codeWriter, null, setOf(Modifier.PUBLIC))
         is PropertySpec -> member.emit(codeWriter, setOf(Modifier.PUBLIC), asStatement = true)
@@ -261,6 +262,11 @@ private constructor(
       members += classSpec
     }
 
+    fun addSingleton(singletonSpec: SingletonSpec) = apply {
+      checkMemberModifiers(singletonSpec.modifiers)
+      members += singletonSpec
+    }
+
     fun addInterface(ifaceSpec: InterfaceSpec) = apply {
       checkMemberModifiers(ifaceSpec.modifiers)
       members += ifaceSpec
@@ -278,6 +284,7 @@ private constructor(
         is ClassSpec -> addClass(typeSpec)
         is TypeAliasSpec -> addTypeAlias(typeSpec)
         is ModuleSpec -> addModule(typeSpec)
+        is SingletonSpec -> addSingleton(typeSpec)
       }
     }
 
