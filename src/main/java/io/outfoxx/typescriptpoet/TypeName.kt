@@ -262,6 +262,20 @@ sealed class TypeName {
     override fun toString() = buildCodeString { emit(this) }
   }
 
+  data class TypeOf
+  internal constructor(
+      val reference: TypeName,
+  ) : TypeName() {
+
+      override fun emit(codeWriter: CodeWriter) {
+        codeWriter.emit("typeof ")
+        reference.emit(codeWriter)
+      }
+
+      override fun toString() = buildCodeString { emit(this) }
+  }
+
+
   companion object {
 
     val NULL = implicit("null")
@@ -554,5 +568,8 @@ sealed class TypeName {
     @JvmStatic
     fun lambda(vararg parameters: Pair<String, TypeName> = emptyArray(), returnType: TypeName) =
       Lambda(parameters.toMap(), returnType)
+
+    @JvmStatic
+    fun typeOf(reference: TypeName) = TypeOf(reference)
   }
 }
