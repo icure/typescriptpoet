@@ -303,7 +303,7 @@ private constructor(
         Modifier.VAR,
       )
       require(propertySpec.decorators.isEmpty()) { "decorators on file properties are not allowed" }
-      checkMemberModifiers(propertySpec.modifiers)
+      checkMemberModifiers(propertySpec.modifiers - setOf(Modifier.CONST, Modifier.LET, Modifier.VAR))
       members += propertySpec
     }
 
