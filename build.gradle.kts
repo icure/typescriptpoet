@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
   jacoco
 
-  kotlin("jvm") version "1.9.23"
+  kotlin("jvm") version "1.9.25"
 
   id("org.jmailen.kotlinter") version "4.3.0"
   `maven-publish`
