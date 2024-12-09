@@ -3,7 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
   jacoco
 
-  kotlin("jvm") version "1.9.22"
+  kotlin("jvm") version "1.9.23"
 
   id("org.jmailen.kotlinter") version "4.3.0"
   `maven-publish`
@@ -21,6 +21,7 @@ val mavenReleasesRepository: String by project
 group = "io.icure"
 version = releaseVersion
 description = "A Kotlin/Java API for generating .ts source files."
+
 
 
 //
