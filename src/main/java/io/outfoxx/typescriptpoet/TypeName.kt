@@ -100,7 +100,7 @@ sealed class TypeName {
     val keyName: String,
     val keyBound: TypeName,
     val value: TypeName,
-    val partial: Boolean
+    val partial: Boolean,
   ) : TypeName() {
 
     override fun emit(codeWriter: CodeWriter) {

@@ -1,8 +1,5 @@
 package io.outfoxx.typescriptpoet
 
-import io.outfoxx.typescriptpoet.ClassSpec.Builder
-import java.lang.StringBuilder
-
 class SingletonSpec
 private constructor(
 	builder: Builder,
