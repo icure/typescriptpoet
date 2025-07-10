@@ -85,7 +85,7 @@ java {
 
 tasks.withType<KotlinJvmCompile>().configureEach {
   compilerOptions {
-    jvmTarget = JvmTarget.JVM_1_8
+    jvmTarget = JvmTarget.JVM_21
   }
 }
 
