@@ -1,13 +1,10 @@
-import org.gradle.kotlin.dsl.assign
-import org.gradle.kotlin.dsl.named
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
 
 plugins {
   jacoco
 
-  kotlin("jvm") version "2.2.0"
+  kotlin("jvm") version "1.9.25"
 
   id("org.jmailen.kotlinter") version "4.3.0"
   `maven-publish`
