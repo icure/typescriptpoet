@@ -21,8 +21,10 @@ private constructor(
 	val propertySpecs = builder.propertySpecs.toImmutableList()
 	val functionSpecs = builder.functionSpecs.toImmutableList()
 	val mixins = builder.mixins.toImmutableList()
+	val tsDoc = builder.tsDoc.build()
 
 	override fun emit(codeWriter: CodeWriter) {
+		codeWriter.emitTSDoc(tsDoc)
 		if (Modifier.EXPORT in modifiers) {
 			codeWriter.emit("export ")
 		}
@@ -106,6 +108,15 @@ private constructor(
 		internal val propertySpecs = mutableListOf<PropertySpec>()
 		internal val functionSpecs = mutableListOf<FunctionSpec>()
 		internal val mixins = mutableListOf<TypeName>()
+		internal val tsDoc = CodeBlock.builder()
+
+		fun addTSDoc(format: String, vararg args: Any) = apply {
+			tsDoc.add(format, *args)
+		}
+
+		fun addTSDoc(block: CodeBlock) = apply {
+			tsDoc.add(block)
+		}
 
 		fun addModifiers(vararg modifiers: Modifier) = apply {
 			modifiers.forEach {
