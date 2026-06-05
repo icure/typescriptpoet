@@ -94,11 +94,16 @@ private constructor(
 	}
 
 	private fun emitFunction(codeWriter: CodeWriter, functionSpec: FunctionSpec) {
-		TODO("Function support not yet implemented")
+		functionSpec.emitSignature(codeWriter, name)
+		codeWriter.emit(" {\n")
+		codeWriter.indent()
+		codeWriter.emitCode(functionSpec.body)
+		codeWriter.unindent()
+		codeWriter.emit("}")
 	}
 
 	private fun emitFunctionType(codeWriter: CodeWriter, functionSpec: FunctionSpec) {
-		TODO("Function support not yet implemented")
+		functionSpec.emitSignature(codeWriter, name)
 	}
 
 	class Builder(

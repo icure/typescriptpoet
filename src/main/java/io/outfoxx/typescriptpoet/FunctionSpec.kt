@@ -72,7 +72,7 @@ private constructor(
     codeWriter.emit("}\n")
   }
 
-  private fun emitSignature(
+  internal fun emitSignature(
     codeWriter: CodeWriter,
     enclosingName: String?,
   ) {
